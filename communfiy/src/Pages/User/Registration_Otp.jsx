@@ -1,15 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 function Registration_Otp() {
+  console.log("---------------------------")
   const navigate = useNavigate();
   const location = useLocation();
   const [formError, setFormError] = useState([]);
   const baseUrl = "http://127.0.0.1:8000";
-  const email = location.state.email;
-  const isForChangePassword = location.state.isForChangePassword;
+  const email = location.state?.email;
+  const isForChangePassword = location.state?.isForChangePassword;
+ 
+  console.log("---------------------------")
+  useEffect(() => {
+    // Check if email and isForChangePassword are present
+    if (!email || isForChangePassword === undefined) {
+      // Redirect to the registration page or another page of your choice
+      navigate("/test", { replace: true });
+    }
+ }, [navigate, email, isForChangePassword]);
 
 
 

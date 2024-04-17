@@ -61,7 +61,7 @@ function UserRegister() {
             // src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
             // alt="Your Company"
           />
-          <h2 className="text-center text-xl font-bold leading-9 tracking-tight text-indigo-600 ">
+          <h2 className="text-center text-xl font-bold leading-9 tracking-tight text-zinc-600 ">
             Create your account
           </h2>
         </div>
@@ -190,14 +190,14 @@ function UserRegister() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-zinc-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-10 text-center text-sm text-zinc-500">
             <span>Already have account ?</span>
             <Link to="/">Sign In</Link>{" "}
             {/* Assuming you want to change the text */}

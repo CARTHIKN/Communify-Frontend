@@ -1,17 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 function ChangePassword() {
     const [formError, setFormError] = useState([]);
     const location = useLocation();
     const navigate = useNavigate();
     const baseUrl = "http://127.0.0.1:8000";
+    const email = location.state?.email;
+    console.log(email)
+    useEffect(() => {
+        // Check if email and isForChangePassword are present
+        if (email === undefined) {
+          // Redirect to the registration page or another page of your choice
+          navigate("/test", { replace: true });
+          console.log("iammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+        }
+     }, [email]);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setFormError([]);
-        const email = location.state.email;
         const password = event.target.password.value;
         const confirm_password = event.target.confirm_password.value;
      
@@ -46,7 +56,8 @@ function ChangePassword() {
           console.log("+++++++++++++++++++++++++")
           if (res.status === 200) {
             console.log("----------------")
-            navigate("/test", {
+            console.log("hereeeeeeeeeeeeeeeeeeeeee")
+            navigate("/", {
               state: res.data.message,
               replace: true,
             });

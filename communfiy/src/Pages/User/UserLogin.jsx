@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { set_Authentication } from "../../Redux/authentication/authenticationSlice";
 import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 
 const UserLogin = () => {
@@ -11,6 +12,20 @@ const UserLogin = () => {
   const navigate = useNavigate();
   const baseUrl = "http://127.0.0.1:8000";
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.authentication_user.isAuthenticated);
+  const isAdmin = useSelector((state) => state.authentication_user.isAdmin);
+
+  useEffect(() => {
+    // Check if the user is authenticated and a superuser
+    if (isAuthenticated && isAdmin) {
+      navigate("/admin/home");
+    }
+  }, [isAuthenticated, isAdmin, navigate]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +45,11 @@ const UserLogin = () => {
       if (res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
+        const accessToken = localStorage.getItem("access");
+        const refreshToken = localStorage.getItem("refresh");
+        console.log(refreshToken)
+        console.log(accessToken)
+        console.log(")))))))))))))))))))))))))))))))))))))))))")
         
 
         dispatch(
@@ -40,7 +60,13 @@ const UserLogin = () => {
           })
         );
 
-        navigate("test", {
+        localStorage.setItem("authInfo", JSON.stringify({
+          username: jwtDecode(res.data.access).username,
+          isAuthenticated: true,
+          isAdmin: res.data.isAdmin,
+        }));
+
+        navigate("/home", {
           state: res.data.message,
         });
         return res;
@@ -55,10 +81,16 @@ const UserLogin = () => {
       }
     }
   };
+  useEffect(() => {
+    // Check if the user is authenticated and isAdmin
+    if (isAuthenticated ) {
+      navigate("/home");
+    }
+  }, [isAuthenticated,navigate]);
   return (
     <>
 
-      <div className="flex min-h-full flex-1 flex-col justify-center bg-red px-6 py-12 lg:px-8  ">
+      <div className="flex min-h-full lg:pb-48 flex-1 bg-zinc-200 flex-col justify-center bg-red px-6 py-12 lg:px-8" style = {{height: "100vh"}} >
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
@@ -74,7 +106,7 @@ const UserLogin = () => {
           <form
             onSubmit={handleSubmit}
             className="space-y-6"
-            action="#"
+            action="#"  
             method="POST"
           >
             <div>
@@ -134,7 +166,7 @@ const UserLogin = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-zinc-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -143,7 +175,7 @@ const UserLogin = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}
-            <span className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <span className="font-semibold leading-6 text-zinc-600 hover:text-zinc-500">
               <Link to="register">create a new account</Link>
             </span>
           </p>
