@@ -14,6 +14,7 @@ const UserLogin = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.authentication_user.isAuthenticated);
   const isAdmin = useSelector((state) => state.authentication_user.isAdmin);
+  console.log(isAuthenticated)
 
   useEffect(() => {
     // Check if the user is authenticated and a superuser
@@ -21,6 +22,8 @@ const UserLogin = () => {
       navigate("/admin/home");
     }
   }, [isAuthenticated, isAdmin, navigate]);
+
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/home");
@@ -60,11 +63,11 @@ const UserLogin = () => {
           })
         );
 
-        localStorage.setItem("authInfo", JSON.stringify({
-          username: jwtDecode(res.data.access).username,
-          isAuthenticated: true,
-          isAdmin: res.data.isAdmin,
-        }));
+        // localStorage.setItem("authInfo", JSON.stringify({
+        //   username: jwtDecode(res.data.access).username,
+        //   isAuthenticated: true,
+        //   isAdmin: res.data.isAdmin,
+        // }));
 
         navigate("/home", {
           state: res.data.message,

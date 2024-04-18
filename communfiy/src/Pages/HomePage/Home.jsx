@@ -4,8 +4,12 @@ import SideBar from '../../Components/NavBar/Sidebar'
 
 import PostUpload from './PostUpload'
 import PostView from './PostView'
+import { useSelector } from 'react-redux'
 
 function Home() {
+  const isAuthenticated = useSelector((state) => state.authentication_user.isAuthenticated);
+  console.log("homeeeeee", isAuthenticated)
+
     
     const [toggle, setToggle] = useState(false)
     const [refreshPosts, setRefreshPosts] = useState(false);

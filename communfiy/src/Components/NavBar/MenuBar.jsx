@@ -45,17 +45,17 @@ export default function MenuBar({ setToggle, toggle }) {
     localStorage.clear();
     dispatch(
       set_Authentication({
-        usernamename: null,
+        username: null,
         isAuthenticated: false,
         isAdmin: false,
       })
       
     );
-    localStorage.setItem("authInfo", JSON.stringify({
-      username: null,
-      isAuthenticated: null,
-      isAdmin: null,
-    }));
+    // localStorage.setItem("authInfo", JSON.stringify({
+    //   username: null,
+    //   isAuthenticated: null,
+    //   isAdmin: null,
+    // }));
     navigate("/");
   };
   

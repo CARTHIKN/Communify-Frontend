@@ -54,11 +54,11 @@ function AdminLogin() {
               isAdmin: true,
             })
           );
-          localStorage.setItem("authInfo", JSON.stringify({
-            username: jwtDecode(res.data.access).username,
-            isAuthenticated: true,
-            isAdmin: true,
-          }));
+          // localStorage.setItem("authInfo", JSON.stringify({
+          //   username: jwtDecode(res.data.access).username,
+          //   isAuthenticated: true,
+          //   isAdmin: true,
+          // }));
 
   
           navigate("/admin/home", {

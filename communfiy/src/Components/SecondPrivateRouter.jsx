@@ -7,7 +7,7 @@ import { set_user_basic_details } from '../Redux/userBasicDetials/userBasicDetai
 import { useSelector } from 'react-redux';
 
 
-function PrivateRoute({ children }) {
+function SecondPrivateRoute({ children }) {
 
   const dispatch = useDispatch()
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,13 +27,10 @@ function PrivateRoute({ children }) {
         })
         
       );
-      console.log("auth",authInfo.isAdmin)
+      console.log(authInfo.isAdmin)
 
 
       console.log(authInfo.username)
-      console.log(authInfo.isAuthenticated)
-
-
       setIsAuthenticated(authInfo.isAuthenticated);
       setIsAdmin(authInfo.isAdmin)
       
@@ -49,10 +46,9 @@ function PrivateRoute({ children }) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated ) {
+  if (isAuthenticated ) {
     // If not authenticated, redirect to login page with the return URL
-    
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }  
 
   if (isAdmin){
@@ -64,4 +60,4 @@ function PrivateRoute({ children }) {
 }
 
 
-export default PrivateRoute;
+export default SecondPrivateRoute;

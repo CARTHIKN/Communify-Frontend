@@ -11,13 +11,15 @@ import Home from "../../../Pages/HomePage/Home";
 import PrivateRoute from "../../PrivateRouter";
 import UserProfile from "../../../Pages/UserProfile/UserProfile";
 import ProfileEdit from "../../../Pages/UserProfile/ProfileEdit";
+import SecondPrivateRoute from "../../SecondPrivateRouter";
 
 function UserWrapper() {
   return (
     <div>
      
       <Routes>
-        <Route path="/" element={<UserLogin />}></Route>
+        
+        <Route path="/" element={<UserLogin/>}></Route>
         <Route path="register" element={<UserRegister />}></Route>
         <Route path="otp" element={<Registration_Otp />}></Route>
         <Route path="test" element={<Test/>}></Route>
