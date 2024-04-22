@@ -51,11 +51,7 @@ export default function AdminMenuBar({ setToggle, toggle }) {
       })
       
     );
-    // localStorage.setItem("authInfo", JSON.stringify({
-    //   username: null,
-    //   isAuthenticated: null,
-    //   isAdmin: null,
-    // }));
+
     navigate("/admin");
   };
   

@@ -8,7 +8,14 @@ import userimg from "../../images/user.png"
 function ProfileWithBio() {
     const username = useSelector((state) => state.authentication_user.username);
     const [userData, setUserData] = useState(null);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
+    const [postCount, setPostCount] = useState(0);
+
+
     const baseUrl = "http://127.0.0.1:8000";
+    const baseUrl2 = "http://127.0.0.1:8001";
+
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -27,9 +34,26 @@ function ProfileWithBio() {
             console.error("Error fetching user profile:", error);
           }
         };
-      
-        fetchUserProfile();
-      }, [baseUrl, username]);
+
+        const fetchFollowerFollowingCount = async () => {
+          try {
+              const res = await axios.get(`${baseUrl2}/api/user/friends-count/${username}/`);
+              if (res.status === 200) {
+                console.log("klsdjfkld");
+                  setFollowersCount(res.data.followers_count);
+                  setFollowingCount(res.data.following_count);
+                  setPostCount(res.data.post_count)
+
+
+              }
+          } catch (error) {
+              console.error("Error fetching follower/following count:", error);
+          }
+      };
+
+      fetchUserProfile();
+      fetchFollowerFollowingCount();
+      }, [baseUrl,baseUrl2, username]);
     
   return (
     <div>
@@ -37,7 +61,7 @@ function ProfileWithBio() {
         <div className="px-3 py-2">
           <div className="flex flex-col gap-1 text-center">
           <img
-              className="block mx-auto bg-center bg-no-repeat bg-cover w-20 h-20 rounded-full border border-gray-400 shadow-lg"
+              className="block mx-auto w-20 h-20 rounded-full border border-gray-400 shadow-lg object-cover object-center"
               href=""
               src={userData? userData.profile_picture? userData.profile_picture: userimg :userimg}
             />
@@ -49,15 +73,15 @@ function ProfileWithBio() {
 
           <div className="flex justify-center items-center gap-2 my-3">
             <div className="font-semibold text-center mx-4">
-              <p className="text-black">102</p>
+              <p className="text-black">{postCount}</p>
               <span className="text-gray-400">Posts</span>
             </div>
             <div className="font-semibold text-center mx-4">
-              <p className="text-black">1M</p>
+              <p className="text-black">{followersCount}</p>
               <span className="text-gray-400">Followers</span>
             </div>
             <div className="font-semibold text-center mx-4">
-              <p className="text-black">102</p>
+              <p className="text-black">{followingCount}</p>
               <span className="text-gray-400">Following</span>
             </div>
           </div>

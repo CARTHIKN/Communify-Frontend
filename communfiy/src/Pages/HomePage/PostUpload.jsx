@@ -85,43 +85,45 @@ const PostUpload = (props) => {
 
  return (
   <div>
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <style>
-      {`
-        .round {
-          border-radius: 50%;
-        }
-      `}
-    </style>
-    <div className="w-full  flex flex-row flex-wrap justify-center">
-      <div className="w-full md:w-3/4 lg:w-4/5 p-5 md:px-12 lg:24 h-full antialiased">
-        <div className="bg-white w-full shadow rounded-lg p-5 flex flex-row flex-wrap items-stretch">
-          <div className="w-2 md:w-32 lg:w-32 mb-3">
-            {selectedImage ? (
-              <div className="flex items-center">
-                <img src={selectedImage} alt="Selected Image" className="w-20 h-20 sm:w-20 md:w-20 rounded-md border border-gray-300 shadow-md mr-3" />
-                <IoClose size={24} className="cursor-pointer text-indigo-500" onClick={handleRemoveImage} title="Delete Image" />
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <style>
+    {`
+      .round {
+        border-radius: 50%;
+      }
+    `}
+  </style>
+  <div className="w-full flex flex-row flex-wrap justify-center">
+    <div className="w-full md:w-3/4 lg:w-4/5 p-5 md:px-12 lg:24 h-full antialiased">
+      <div className="bg-white w-full shadow rounded-lg p-5 flex flex-row flex-wrap items-stretch">
+        <div className=" md:w-ajto lg:w-auto mb-3">
+          {selectedImage ? (
+            <div className="flex flex-col items-center">
+             <div className="flex flex-col items-center mb-3">
+                <img src={selectedImage} alt="Selected Image" className="lg:w-auto pl-52 pr-52 lg:h-auto sm:w-20 md:w-20 rounded-md    mr-3" />
+                <button type="button" className="bg-zinc-800 hover:bg-indigo-300 text-white p-1 rounded-lg mt-3" onClick={handleRemoveImage}>Cancel</button>
+             </div>
+             <div className="w-full md:w-auto lg:flex-grow mb-3 flex flex-row items-center">
+              <textarea className="bg-gray-200 w-96 rounded-lg shadow border ml- mr-1 p-2 h-20 flex-grow" rows="5" value={caption} onChange={handleCaptionChange} placeholder="Caption for your post"></textarea>
+              <div className="ml-3">
+                  <button type="button" className="bg-zinc-800 hover:bg-indigo-300 text-white p-2 rounded-lg" onClick={handleSubmit}>Submit</button>
               </div>
-            ) : (
-              <div className="rounded-md border border-indigo-500 bg-gray-50 p-2 h-20 sm:w-20 shadow-md w-20">
-                <label htmlFor="upload" className="flex flex-col items-center gap- cursor-pointer">
-                  <IoImageOutline size={20} />
-                  <span className="text-gray-600 font-medium">New Post</span>
-                </label>
-                <input id="upload" type="file" className="hidden" onChange={handleImageChange} />
               </div>
-            )}
-          </div>
-          <div className="w-full md:w-auto lg:flex-grow mb-3">
-          <textarea className="bg-gray-200 w-full rounded-lg shadow border p-2 h-20" rows="5" value={caption} onChange={handleCaptionChange} placeholder="Caption for your post"></textarea>
-          </div>
-          <div className="w-full flex justify-end">
-            <button type="button" className="bg-zinc-800 hover:bg-indigo-300 text-white p-2 rounded-lg  mt-3" onClick={handleSubmit}>Submit</button>
-          </div>
+            </div>
+          ) : (
+            <div className="rounded-md border border-zinc-500 bg-gray-50 p-2 h-20 sm:w-20 shadow-md w-20">
+             <label htmlFor="upload" className="flex flex-col items-center gap- cursor-pointer">
+                <IoImageOutline size={20} />
+                <span className="text-gray-600 font-medium">New Post</span>
+             </label>
+             <input id="upload" type="file" className="hidden" onChange={handleImageChange} />
+            </div>
+          )}
         </div>
       </div>
     </div>
   </div>
+</div>
 );
 
 

@@ -8,31 +8,69 @@ import ForgotPasswrod from "../../../Pages/User/ForgotPasswrod";
 import ChangePassword from "../../../Pages/User/ChangePassword";
 import Test2 from "../../../Pages/User/Test2";
 import Home from "../../../Pages/HomePage/Home";
-import PrivateRoute from "../../PrivateRouter";
+import PrivateRoute from "../../PrivateRoutes/PrivateRouter";
 import UserProfile from "../../../Pages/UserProfile/UserProfile";
 import ProfileEdit from "../../../Pages/UserProfile/ProfileEdit";
-import SecondPrivateRoute from "../../SecondPrivateRouter";
+import FriendsProfile from "../../../Pages/UserProfile/FriendsProfile";
+import Search from "../../../Pages/Search/Search";
+
+
+
 
 function UserWrapper() {
   return (
     <div>
-     
       <Routes>
-        
-        <Route path="/" element={<UserLogin/>}></Route>
+        <Route path="/" element={<UserLogin />}></Route>
         <Route path="register" element={<UserRegister />}></Route>
         <Route path="otp" element={<Registration_Otp />}></Route>
-        <Route path="test" element={<Test/>}></Route>
-        <Route path="test2" element={<Test2/>}></Route>
-        <Route path="forgot-password" element={<ForgotPasswrod/>}></Route>
-        <Route path="change-password" element={<ChangePassword/>}></Route>
+        <Route path="test" element={<Test />}></Route>
+        <Route path="test2" element={<Test2 />}></Route>
+        <Route path="forgot-password" element={<ForgotPasswrod />}></Route>
+        <Route path="change-password" element={<ChangePassword />}></Route>
+        
         
 
-        <Route path="home" element={<PrivateRoute><Home/></PrivateRoute>}></Route>
-        <Route path="user-profile" element={<PrivateRoute><UserProfile/></PrivateRoute>}></Route>
-        <Route path="user-profile-edit" element={<PrivateRoute><ProfileEdit/></PrivateRoute>}></Route>
-
-
+        <Route
+          path="home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="user-profile"
+          element={
+            <PrivateRoute>
+              <UserProfile />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="user-profile-edit"
+          element={
+            <PrivateRoute>
+              <ProfileEdit />
+            </PrivateRoute>
+          }
+        ></Route>
+        <Route
+          path="friend-profile/:username" // Dynamic route parameter for username
+          element={
+            <PrivateRoute>
+              <FriendsProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="search" // Dynamic route parameter for username
+          element={
+            <PrivateRoute>
+              <Search />
+            </PrivateRoute>
+          }
+        />
 
       </Routes>
     </div>

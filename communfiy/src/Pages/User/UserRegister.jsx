@@ -1,34 +1,33 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import LoginNavbar from "./LoginNavbar";
 
 function UserRegister() {
-  const [formError, setFormError] = useState([]);
+  const [formError, setFormError] = useState({});
   const navigate = useNavigate();
   const baseUrl = "http://127.0.0.1:8000";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setFormError([]);
+    setFormError({}); // Initialize formError as an object
+
     const password = event.target.password.value;
     const passwordConfirmation = event.target.password_confirmation.value;
-  
-    
 
     if (password !== passwordConfirmation) {
-      setFormError([
-        { field: "password_confirmation", message: "Passwords do not match !" },
-      ]);
-      return; 
+      setFormError({
+        password_confirmation: ["Passwords do not match!"],
+      });
+      return;
     }
-    console.log("33333333333333333")
+
     const formData = {
       username: event.target.username.value,
       email: event.target.email.value,
       password: event.target.password.value,
       phone: event.target.phone.value,
     };
-    console.log(name)
 
     try {
       const res = await axios.post(baseUrl + "/api/register/", formData, {
@@ -37,30 +36,29 @@ function UserRegister() {
         },
       });
       if (res.status === 200) {
-          navigate("/otp", {
-            state: { email: event.target.email.value,isForChangePassword:false },
-          });
-        return res; 
+        navigate("/otp", {
+          state: { email: event.target.email.value, isForChangePassword: false },
+        });
+        return res;
       }
     } catch (error) {
-
       if (error.response && error.response.status === 406) {
-        setFormError(error.response.data.message);
+        setFormError({ general: error.response.data.message });
+      } else if (error.response && error.response.data.errors) {
+        setFormError(error.response.data.errors); // Update formError as an object
       } else {
-        setFormError(error.response.data);
+        setFormError({ general: "An error occurred. Please try again later." });
       }
     }
   };
 
   return (
-    <div class=" mx-auto ">
-      <div className="flex min-h-full flex-1 flex-col justify-center bg-red px-6 py-6 lg:px-8  ">
+    <div>
+      <LoginNavbar/>
+    <div className="mx-auto mt-20">
+      
+      <div className="flex min-h-full flex-1 flex-col justify-center bg-red px-6 py-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            // src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            // alt="Your Company"
-          />
           <h2 className="text-center text-xl font-bold leading-9 tracking-tight text-zinc-600 ">
             Create your account
           </h2>
@@ -76,7 +74,7 @@ function UserRegister() {
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="username"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Username
@@ -91,10 +89,11 @@ function UserRegister() {
                 />
               </div>
             </div>
+
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Email
@@ -102,7 +101,7 @@ function UserRegister() {
               </div>
               <div className="mt-2">
                 <input
-                  id="typeEmailX-2"
+                  id="email"
                   name="email"
                   type="email"
                   required
@@ -110,10 +109,11 @@ function UserRegister() {
                 />
               </div>
             </div>
+
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="phone"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Phone
@@ -128,6 +128,7 @@ function UserRegister() {
                 />
               </div>
             </div>
+
             <div>
               <div className="flex items-center justify-between">
                 <label
@@ -151,10 +152,10 @@ function UserRegister() {
             <div>
               <div className="flex items-center justify-between">
                 <label
-                  htmlFor="password"
+                  htmlFor="password_confirmation"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Re enter password
+                  Re-enter Password
                 </label>
               </div>
               <div className="mt-2">
@@ -167,23 +168,20 @@ function UserRegister() {
                 />
               </div>
             </div>
-            {formError.length > 0 && (
-              <div className="text-fuchsia-500">
-                {formError.map((error, index) => (
-                  <p key={index} className="text-red-500">
-                    {error.message}
-                  </p>
-                ))}
-              </div>
-            )}
 
-            {Object.keys(formError).length >= 0 && (
-              <div className="text-red-500">
-                {Object.entries(formError).map(([field, message], index) => (
-                  <p key={index} className="text-red-500">
-                    {message[0]}
-                  </p>
-                ))}
+            {Object.keys(formError).length > 0 && (
+            <div className="text-fuchsia-500">
+              {Object.entries(formError).map(([field, messages], index) => (
+                <div key={index} className="text-red-500">
+                  {Array.isArray(messages) ? (
+                    messages.map((message, subIndex) => (
+                      <p key={subIndex}>{message}</p>
+                    ))
+                  ) : (
+                    <p>{messages}</p>
+                  )}
+                </div>
+              ))}
               </div>
             )}
 
@@ -192,19 +190,18 @@ function UserRegister() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-zinc-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Sign Up
               </button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm text-zinc-500">
-            <span>Already have account ?</span>
-            <Link to="/">Sign In</Link>{" "}
-            {/* Assuming you want to change the text */}
-            <span className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"></span>
+            <span>Already have an account?</span>
+            <Link to="/">Sign In</Link>
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 }

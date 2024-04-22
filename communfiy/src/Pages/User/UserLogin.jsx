@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { set_Authentication } from "../../Redux/authentication/authenticationSlice";
 import { jwtDecode } from "jwt-decode";
 import { useSelector } from "react-redux";
+import LoginNavbar from "./LoginNavbar";
+
 
 
 const UserLogin = () => {
@@ -21,6 +23,7 @@ const UserLogin = () => {
     if (isAuthenticated && isAdmin) {
       navigate("/admin/home");
     }
+    console.log("admmmmmmmmmmmmmmin", isAuthenticated, isAdmin)
   }, [isAuthenticated, isAdmin, navigate]);
 
 
@@ -28,6 +31,7 @@ const UserLogin = () => {
     if (isAuthenticated) {
       navigate("/home");
     }
+    console.log("homeeeeeeeeeeee")
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (event) => {
@@ -92,6 +96,8 @@ const UserLogin = () => {
   }, [isAuthenticated,navigate]);
   return (
     <>
+
+    <LoginNavbar/>
 
       <div className="flex min-h-full lg:pb-48 flex-1 bg-zinc-200 flex-col justify-center bg-red px-6 py-12 lg:px-8" style = {{height: "100vh"}} >
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">

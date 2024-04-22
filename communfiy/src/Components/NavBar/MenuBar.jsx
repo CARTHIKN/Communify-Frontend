@@ -51,11 +51,6 @@ export default function MenuBar({ setToggle, toggle }) {
       })
       
     );
-    // localStorage.setItem("authInfo", JSON.stringify({
-    //   username: null,
-    //   isAuthenticated: null,
-    //   isAdmin: null,
-    // }));
     navigate("/");
   };
   
@@ -97,12 +92,12 @@ export default function MenuBar({ setToggle, toggle }) {
               </svg>
             </button>
             <a href="/" className="flex ms-2 md:me-24">
-              <img
+              {/* <img
                 src="https://flowbite.com/docs/images/logo.svg"
                 className="h-8 me-3"
                 alt="FlowBite Logo"
-              />
-              <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+              /> */}
+              <span className="self-center text-xl ml-7 font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                 Communify
               </span>
             </a>
@@ -118,7 +113,7 @@ export default function MenuBar({ setToggle, toggle }) {
                 >
                   <span className="sr-only">Open user menu</span>
                   <img
-                    className="w-8 h-8 rounded-full"
+                    className="w-8 h-8 rounded-full object-cover object-center"
                     src={userData? userData.profile_picture? userData.profile_picture: userimg :userimg}
                     alt="user photo"
                   />

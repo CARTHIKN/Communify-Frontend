@@ -3,6 +3,7 @@ import AdminLogin from '../../Pages/Admin/AdminLogin';
 import AdminHome from '../../Pages/Admin/AdminHome';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import AdminPrivateRoute from '../PrivateRoutes/AdminPrivateRoute';
 
 function AdminWrapper() {
     const isAuthenticated =useSelector((state) => state.authentication_user.isAuthenticated);
@@ -14,17 +15,9 @@ function AdminWrapper() {
     <div>
       <Routes>
       <Route path="" element={<AdminLogin/>}></Route>
-      <Route path="home" element={<AdminHome/>}></Route>
-      <Route
-          path="home"
-          element={
-            isAuthenticated && isAdmin ? (
-              <AdminHome />
-            ) : (
-              <Navigate to="admin" replace /> // Correct usage of Navigate
-            )
-          }
-        />
+
+      <Route path="home" element= { <AdminPrivateRoute><AdminHome/></AdminPrivateRoute> }></Route>
+      
 
       </Routes>
     </div>
