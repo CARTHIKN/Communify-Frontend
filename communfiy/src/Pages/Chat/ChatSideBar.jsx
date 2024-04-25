@@ -47,6 +47,13 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
     fetchChatRooms();
   }, [baseUrl3, username]);
+  useEffect(() => {
+    if (selectedUsername && chatrooms.some(user => user.username === selectedUsername)) {
+      setOpened(selectedUsername);
+      onUserClick(selectedUsername);
+
+    }
+  }, [chatrooms, selectedUsername]);
 
   const handleUserClick = (username) => {
     setOpened(username);
@@ -79,7 +86,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
       </div>
 
       <div className="flex flex-col">
-      {selectedUsername && !searchQuery && (
+      {selectedUsername && !chatrooms.some(user => user.username === selectedUsername) && !searchQuery && (
   <div
     onClick={handleUserClick2}
     style={{ cursor: 'pointer' }}
@@ -102,7 +109,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
     </div>
     <div className="w-full">
       <div className="text-lg font-semibold">{selectedUsername}</div>
-      <span className="text-gray-500">Pick me at 9:00 AM</span>
+      <span className="text-gray-500">Pick me at 9:00 sdfsdAM</span>
     </div>
   </div>
 )}
