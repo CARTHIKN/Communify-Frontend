@@ -124,7 +124,7 @@ function ChangeProfile() {
     };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" >
+    <div className="d-flex justify-content-center align-items-center pl-40 mr-40" >
       <section className="" style={{ backgroundColor: '#eee' }}>
         <div className="container py-5">
           <div className="row d-flex justify-content-center align-items-center">
@@ -135,14 +135,14 @@ function ChangeProfile() {
                     {selectedImage ? (
                        <img
                        src={selectedImage}
-                       className="rounded-full w-24 h-24 "
+                       className="rounded-full w-24 h-24 object-cover border-2 border-zinc-400 object-center "
                        style={{ width: '100px', height: '100px' }}
                        alt="img"
                      />
                     ) : (
                       <img
                         src={userData? userData.profile_picture? userData.profile_picture: userimg :userimg}
-                        className="rounded-full border"
+                        className="rounded-full border object-cover object-center"
                         style={{ width: '100px', height: '100px' }}
                         alt="img"
                       />

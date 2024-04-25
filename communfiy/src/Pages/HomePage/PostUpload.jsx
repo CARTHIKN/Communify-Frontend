@@ -41,7 +41,7 @@ const PostUpload = (props) => {
     
     try {
       
-      const res = await axios.post(baseUrl + "/api/create-post/", formData, {
+      const res = await axios.post(baseUrl + "/api/create-post/", formData, { 
       });
       console.log(res)
       if (res.status === 201) {
@@ -94,8 +94,8 @@ const PostUpload = (props) => {
     `}
   </style>
   <div className="w-full flex flex-row flex-wrap justify-center">
-    <div className="w-full md:w-3/4 lg:w-4/5 p-5 md:px-12 lg:24 h-full antialiased">
-      <div className="bg-white w-full shadow rounded-lg p-5 flex flex-row flex-wrap items-stretch">
+    <div className="w-full md:w-3/4 lg:w-4/5  pt-3 pl-3 pr-3 md:px-12 lg:24 h-full antialiased">
+      <div className="bg-white w-full shadow rounded-lg p-3 flex flex-row flex-wrap items-stretch">
         <div className=" md:w-ajto lg:w-auto mb-3">
           {selectedImage ? (
             <div className="flex flex-col items-center">

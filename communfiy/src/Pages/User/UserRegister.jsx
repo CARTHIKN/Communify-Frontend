@@ -55,11 +55,11 @@ function UserRegister() {
   return (
     <div>
       <LoginNavbar/>
-    <div className="mx-auto mt-20">
+    <div className="mx-auto ">
       
       <div className="flex min-h-full flex-1 flex-col justify-center bg-red px-6 py-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="text-center text-xl font-bold leading-9 tracking-tight text-zinc-600 ">
+          <h2 className="text-center  mt-24 text-xl font-bold leading-9 tracking-tight text-zinc-600 ">
             Create your account
           </h2>
         </div>

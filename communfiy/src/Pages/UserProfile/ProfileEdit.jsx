@@ -5,10 +5,11 @@ import ChangeBio from './ChangeBio'
 function ProfileEdit() {
   return (
     <div className='h-full'style={{ height: '100vh', backgroundColor: '#eee' }}>
-        <div>
+        <div Name=  'lg:pl-40 g:pr-40  w-full'  >
         <ChangeProfile/>
             
         </div>
+        
         <div className=  'lg:pl-40  lg:pr-40 w-full '>
         <ChangeBio/>
         </div>

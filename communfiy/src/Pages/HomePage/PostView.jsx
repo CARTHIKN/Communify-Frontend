@@ -76,7 +76,7 @@ function PostView({ refreshPosts }) {
  return (
     <div className="w-full flex flex-row flex-wrap justify-center bg-zinc-200 ">
       <div className="w-full h-auto flex flex-row flex-wrap justify-center bg-zinc-200">
-        <div className="w-full md:w-3/4 lg:w-4/5 p-5 md:px-12 lg:24 h-auto antialiased bg-zinc-200 ">
+        <div className="w-full md:w-3/4 lg:w-4/5  pb-3 pl-3 pr-3 md:px-12 lg:24 h-auto antialiased bg-zinc-200 ">
           <div className="mt-3 flex flex-col rounded-lg ">
             {posts.map((post, index) => (
               <div key={index} className="bg-white mt-3 pt-2 px-2 pb-2 bg-green rounded-lg">

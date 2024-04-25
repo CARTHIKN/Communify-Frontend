@@ -13,6 +13,8 @@ import UserProfile from "../../../Pages/UserProfile/UserProfile";
 import ProfileEdit from "../../../Pages/UserProfile/ProfileEdit";
 import FriendsProfile from "../../../Pages/UserProfile/FriendsProfile";
 import Search from "../../../Pages/Search/Search";
+import Chat from "../../../Pages/Chat/Chat";
+
 
 
 
@@ -68,6 +70,14 @@ function UserWrapper() {
           element={
             <PrivateRoute>
               <Search />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="chat" // Dynamic route parameter for username
+          element={
+            <PrivateRoute>
+              <Chat />
             </PrivateRoute>
           }
         />

@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom'
 import { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 
 
 function FriendsProfileWithBio(props) {
+    const navigate = useNavigate()
     const username = useSelector((state) => state.authentication_user.username);
     const friend_username = props.friend_username
     const [isFollowing, setIsFollowing] = useState(false);
@@ -95,6 +98,11 @@ function FriendsProfileWithBio(props) {
         fetchUserProfile();
         fetchFollowerFollowingCount();
       }, [baseUrl, friend_username,isFollowing]);
+
+      const handleChatClick = () => {
+        // Navigate to the Chat component with friend_username as parameter
+        navigate(`/chat`, { state: { friendUsername: friend_username, profilePicture: userData?.profile_picture } }); // Updated navigation method
+    };
     
   return (
     <div className='bg-zinc-200'>
@@ -135,7 +143,7 @@ function FriendsProfileWithBio(props) {
                 {isFollowing ? 'Unfollow' : 'Follow'}
             </button>
             {isFollowing && (
-                <button className="bg-blue-500 px-5 py-1 rounded-full text-white shadow-lg">Message</button>
+                <button className="bg-blue-500 px-5 py-1 rounded-full text-white shadow-lg" onClick={handleChatClick} >Message</button>
             )}
           </div>
 
