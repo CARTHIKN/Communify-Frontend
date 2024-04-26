@@ -8,7 +8,12 @@ export default {
     extend: {
       height: {
         'custom': '765px',
-        'custom2': '750px', // Custom height
+        'custom2': '750px', 
+        'custom3' : '500px',
+        'custom4' : '20px',
+        'custom5' :"600px",
+        'custom6' : "450px"
+
       }
     },
   },

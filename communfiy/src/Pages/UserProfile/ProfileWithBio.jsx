@@ -26,7 +26,7 @@ function ProfileWithBio() {
               },
             });
             if (res.status === 200) {
-              
+              console.log("haiii", res.data);
               setUserData(res.data)
             }
             return res;

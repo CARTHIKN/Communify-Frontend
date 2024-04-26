@@ -14,6 +14,9 @@ import ProfileEdit from "../../../Pages/UserProfile/ProfileEdit";
 import FriendsProfile from "../../../Pages/UserProfile/FriendsProfile";
 import Search from "../../../Pages/Search/Search";
 import Chat from "../../../Pages/Chat/Chat";
+import UserPostView from "../../../Pages/UserProfile/UserPostView";
+import EditPost from "../../../Pages/UserProfile/EditPost";
+
 
 
 
@@ -81,6 +84,9 @@ function UserWrapper() {
             </PrivateRoute>
           }
         />
+
+  <Route path="/user/post/:postId" element={<PrivateRoute><UserPostView/></PrivateRoute>} />
+  <Route path="/post/edit/:postId" element={<PrivateRoute><EditPost/></PrivateRoute>} />
 
       </Routes>
     </div>

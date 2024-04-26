@@ -21,6 +21,8 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
         if (res.status === 200) {
           setChatRooms(res.data);
+          console.log(res.data);
+          console.log(chatrooms);
 
           const profilePromises = res.data.map(async (user) => {
             try {
@@ -109,7 +111,6 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
     </div>
     <div className="w-full">
       <div className="text-lg font-semibold">{selectedUsername}</div>
-      <span className="text-gray-500">Pick me at 9:00 sdfsdAM</span>
     </div>
   </div>
 )}

@@ -70,6 +70,8 @@ function ChangeProfile() {
         if (res.status === 200) {
           console.log(res.data);
           setUserData(res.data)
+          console.log(userData);
+          
         }
         return res;
       } catch (error) {
@@ -122,6 +124,27 @@ function ChangeProfile() {
         }
       }
     };
+    const handleRemoveProfile = async () => {
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('remove', 'true');
+  
+      try {
+        const res = await axios.post(`${baseUrl}/api/profile/picture/update/`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        if (res.status === 200) {
+          navigate("/user-profile", {
+            state: res.data.message,
+          });
+        }
+      } catch (error) {
+        console.error("Error removing profile picture:", error);
+      }
+    };
 
   return (
     <div className="d-flex justify-content-center align-items-center pl-40 mr-40" >
@@ -172,7 +195,17 @@ function ChangeProfile() {
                       >
                         Update Profile Pic
                       </button>
+                      
                     )}  
+                    {userData && userData.remove && (
+                    <button
+                      type="button"
+                      className="bg-red-500 px-5 py-1 rounded-full text-white shadow-lg ml-3"
+                      onClick={handleRemoveProfile}
+                    >
+                      Remove Profile
+                    </button>
+                  )}
                     </form>
                   </div>
                 </div>
