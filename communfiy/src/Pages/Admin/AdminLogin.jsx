@@ -24,7 +24,7 @@ function AdminLogin() {
     };
 
     try {
-      const res = await axios.post(baseUrl + "/api/admin/login/", formData, {
+      const res = await axios.post(baseUrl + "/api/accounts/admin/login/", formData, {
         headers: {
           "Content-Type": "application/json",
         },

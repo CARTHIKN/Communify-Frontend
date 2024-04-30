@@ -33,7 +33,7 @@ function Registration_Otp() {
     };
 
     try {
-      const res = await axios.post(baseUrl + "/api/register/otp", formData, {
+      const res = await axios.post(baseUrl + "/api/accounts/register/otp", formData, {
         headers: {
           "Content-Type": "application/json",
         },

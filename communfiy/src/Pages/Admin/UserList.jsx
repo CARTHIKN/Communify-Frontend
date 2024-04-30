@@ -10,7 +10,7 @@ function UserList() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/api/admin/users/?page=${currentPage}&page_size=${pageSize}`);
+                const response = await axios.get(`${baseUrl}/api/accounts/admin/users/?page=${currentPage}&page_size=${pageSize}`);
                 setUsers(response.data.results); // Update users with paginated data
             } catch (error) {
                 console.error('Error fetching users:', error);

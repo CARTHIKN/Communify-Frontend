@@ -11,7 +11,7 @@ function ProfilePost() {
   useEffect(() => {
     const fetchUserPosts = async () => {
       try {
-        const response = await axios.get(baseUrl +`/api/user/posts/?username=${username}`);
+        const response = await axios.get(baseUrl +`/api/home/user/posts/?username=${username}`);
         setPosts(response.data.posts);
       } catch (error) {
         console.error('Error fetching user posts:', error);

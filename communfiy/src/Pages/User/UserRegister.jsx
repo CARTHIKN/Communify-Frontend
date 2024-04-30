@@ -30,7 +30,7 @@ function UserRegister() {
     };
 
     try {
-      const res = await axios.post(baseUrl + "/api/register/", formData, {
+      const res = await axios.post(baseUrl + "/api/accounts/register/", formData, {
         headers: {
           "Content-Type": "application/json",
         },

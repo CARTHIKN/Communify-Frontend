@@ -21,7 +21,7 @@ function ChangeBio() {
     const data = { username, bio, dob };
 
     try {
-      const res = await axios.post(baseUrl + 'api/profile/update-profile/', data);
+      const res = await axios.post(baseUrl + 'api/accounts/profile/update-profile/', data);
 
       if (res.status === 200) {
         // Navigate to the user-profile page after successful update
@@ -40,7 +40,7 @@ function ChangeBio() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(`${baseUrl}/api/user-profile-picture/${username}/`, {
+        const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${username}/`, {
           headers: {
             "Content-Type": "application/json",
           },

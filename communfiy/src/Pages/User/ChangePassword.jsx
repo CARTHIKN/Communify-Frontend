@@ -14,9 +14,7 @@ function ChangePassword() {
         // Check if email and isForChangePassword are present
         if (email === undefined) {
           // Redirect to the registration page or another page of your choice
-          navigate("/test", { replace: true });
-          console.log("iammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
-        }
+          navigate("/test", { replace: true });        }
      }, [email]);
 
     const handleSubmit = async (event) => {
@@ -45,18 +43,14 @@ function ChangePassword() {
           password : event.target.password.value,
           
         };
-        console.log("---------------------------")
     
         try {
-          const res = await axios.post(baseUrl + "/api/change-password/", formData, {
+          const res = await axios.post(baseUrl + "/api/accounts/change-password/", formData, {
             headers: {
               "Content-Type": "application/json",
             },
           });
-          console.log("+++++++++++++++++++++++++")
           if (res.status === 200) {
-            console.log("----------------")
-            console.log("hereeeeeeeeeeeeeeeeeeeeee")
             navigate("/", {
               state: res.data.message,
               replace: true,

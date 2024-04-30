@@ -12,9 +12,14 @@ export default {
         'custom3' : '500px',
         'custom4' : '20px',
         'custom5' :"600px",
-        'custom6' : "450px"
+        'custom6' : "450px",
+        
 
-      }
+
+      },
+      fontSize: {
+        'smaller': '0.6rem', // Customize the size as needed
+      },
     },
   },
   plugins: [],

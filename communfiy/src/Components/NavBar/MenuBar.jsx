@@ -17,13 +17,12 @@ export default function MenuBar({ setToggle, toggle }) {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(`${baseUrl}/api/user-profile-picture/${username}/`, {
+        const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${username}/`, {
           headers: {
             "Content-Type": "application/json",
           },
         });
         if (res.status === 200) {
-          console.log("''''''''''''''''''''''''''''''''''''''''''''''''''''''");
           console.log(res.data);
           setUserData(res.data)
         }

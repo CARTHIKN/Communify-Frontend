@@ -62,7 +62,7 @@ function ChangeProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(`${baseUrl}/api/user-profile-picture/${username}/`, {
+        const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${username}/`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -98,7 +98,7 @@ function ChangeProfile() {
         profile_picture_url: imageUrl    }
 
     try {
-        const res = await axios.post(baseUrl + "/api/profile/picture/update/", formData, {
+        const res = await axios.post(baseUrl + "/api/accounts/profile/picture/update/", formData, {
             headers: {
                 "Content-Type": "multipart/form-data", // Ensure correct content type
               },
@@ -130,7 +130,7 @@ function ChangeProfile() {
       formData.append('remove', 'true');
   
       try {
-        const res = await axios.post(`${baseUrl}/api/profile/picture/update/`, formData, {
+        const res = await axios.post(`${baseUrl}/api/accounts/profile/picture/update/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

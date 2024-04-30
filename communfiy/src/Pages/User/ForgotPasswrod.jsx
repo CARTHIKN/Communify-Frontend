@@ -17,7 +17,7 @@ function ForgotPasswrod() {
     };
 
     try {
-      const res = await axios.post(baseUrl + "/api/forgotpassword/", formData, {
+      const res = await axios.post(baseUrl + "/api/accounts/forgotpassword/", formData, {
         headers: {
           "Content-Type": "application/json",
         },

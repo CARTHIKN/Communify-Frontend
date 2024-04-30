@@ -23,7 +23,7 @@ function SearchTab() {
     const handleSearch = async (query) => {
         try {
             setIsLoading(true);
-            const response = await axios.get(baseUrl + `/api/search/?username=${query}`);
+            const response = await axios.get(baseUrl + `/api/accounts/search/?username=${query}`);
             setSearchResults(response.data.users);
             setIsLoading(false);
         } catch (error) {

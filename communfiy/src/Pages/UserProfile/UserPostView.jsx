@@ -18,7 +18,7 @@ function UserPostView() {
 
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8001/api/post/${postId}/`);
+        const response = await axios.get(`http://127.0.0.1:8001/api/home/post/${postId}/`);
         setPost(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -45,7 +45,7 @@ function UserPostView() {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8001/api/post/${postId}/delete/`);
+      await axios.delete(`http://127.0.0.1:8001/api/home/post/${postId}/delete/`);
       setShowConfirmation(false); // Hide confirmation modal after successful deletion
       navigate('/user-profile'); // Redirect to user profile after successful deletion
     } catch (error) {

@@ -26,12 +26,12 @@ function FriendsProfileWithBio(props) {
         try {
             let res;
             if (isFollowing) {
-                res = await axios.post(`${baseUrl2}/api/user/unfollow/`, {
+                res = await axios.post(`${baseUrl2}/api/home/user/unfollow/`, {
                     username: username,
                     friend_username: friend_username
                 });
             } else {
-                res = await axios.post(`${baseUrl2}/api/user/follow/`, {
+                res = await axios.post(`${baseUrl2}/api/home/user/follow/`, {
                     username: username,
                     friend_username: friend_username
                 });
@@ -46,7 +46,7 @@ function FriendsProfileWithBio(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`${baseUrl2}/api/user/check-following/${username}/${friend_username}`);
+                const res = await axios.get(`${baseUrl2}/api/home/user/check-following/${username}/${friend_username}`);
                 if (res.status === 200) {
                     setIsFollowing(res.data.is_following);
                 }
@@ -63,7 +63,7 @@ function FriendsProfileWithBio(props) {
         const fetchUserProfile = async () => {
           try {
             console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            const res = await axios.get(`${baseUrl}/api/user-profile-picture/${friend_username}/`, {
+            const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${friend_username}/`, {
               headers: {
                 "Content-Type": "application/json",
               },
@@ -81,7 +81,7 @@ function FriendsProfileWithBio(props) {
 
         const fetchFollowerFollowingCount = async () => {
             try {
-                const res = await axios.get(`${baseUrl2}/api/user/friends-count/${friend_username}/`);
+                const res = await axios.get(`${baseUrl2}/api/home/user/friends-count/${friend_username}/`);
                 if (res.status === 200) {
                   console.log("klsdjfkld");
                     setFollowersCount(res.data.followers_count);

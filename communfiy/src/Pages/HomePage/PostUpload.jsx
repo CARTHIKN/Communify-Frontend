@@ -41,7 +41,7 @@ const PostUpload = (props) => {
     
     try {
       
-      const res = await axios.post(baseUrl + "/api/create-post/", formData, { 
+      const res = await axios.post(baseUrl + "/api/home/create-post/", formData, { 
       });
       console.log(res)
       if (res.status === 201) {

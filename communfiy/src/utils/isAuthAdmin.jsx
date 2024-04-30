@@ -7,9 +7,8 @@ const updateAdminToken = async () => {
     const refreshToken = localStorage.getItem("refresh");
     console.log("refres token" , refreshToken);
     const baseUrl = "http://127.0.0.1:8000";
-    console.log("-----------");
     try {
-        const res = await axios.post(baseUrl + "/api/token/refresh/", {
+        const res = await axios.post(baseUrl + "/api/accounts/token/refresh/", {
             refresh: refreshToken,
         });
         console.log("helll");
@@ -35,7 +34,7 @@ const fetchisAdmin = async () => {
     console.log(token);
     const baseUrl = "http://127.0.0.1:8000";
     try {
-        const res = await axios.get(baseUrl + "/api/user/details/", {
+        const res = await axios.get(baseUrl + "/api/accounts/user/details/", {
             headers: {
                 Authorization: `Bearer ${token}`, // Note the space after Bearer
                 Accept: "application/json",

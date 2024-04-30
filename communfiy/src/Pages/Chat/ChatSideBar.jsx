@@ -17,7 +17,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
     const fetchChatRooms = async () => {
       const formData = { username: username };
       try {
-        const res = await axios.post(baseUrl3 + '/api/chatrooms/', formData);
+        const res = await axios.post(baseUrl3 + '/api/chat/chatrooms/', formData);
 
         if (res.status === 200) {
           setChatRooms(res.data);
@@ -26,7 +26,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
           const profilePromises = res.data.map(async (user) => {
             try {
-              const profileRes = await axios.get(`http://127.0.0.1:8000/api/user-profile-picture/${user.username}`);
+              const profileRes = await axios.get(`http://127.0.0.1:8000/api/accounts/user-profile-picture/${user.username}`);
               return { ...user, profilePicture: profileRes.data.profile_picture };
             } catch (error) {
               console.error(`Error fetching profile picture for user ${user.username}:`, error);

@@ -15,7 +15,7 @@ function PostView({ refreshPosts }) {
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(baseUrl + '/api/post-lists/');
+        const res = await axios.get(baseUrl + '/api/home/post-lists/');
         if (Array.isArray(res.data)) {
           setPosts(res.data);
         } else if (typeof res.data === 'object') {
@@ -53,7 +53,7 @@ function PostView({ refreshPosts }) {
 
  const fetchUserProfile = async (username) => {
     try {
-      const userProfileResponse = await axios.get(`http://127.0.0.1:8000/api/user-profile-picture/${username}`);
+      const userProfileResponse = await axios.get(`http://127.0.0.1:8000/api/accounts/user-profile-picture/${username}`);
       return userProfileResponse.data.profile_picture;
     } catch (error) {
       console.error('Error fetching user profile:', error);

@@ -14,7 +14,7 @@ function EditPost() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8001/api/post/${postId}/`);
+        const response = await axios.get(`http://127.0.0.1:8001/api/home/post/${postId}/`);
         setPost(response.data);
         setCaption(response.data.caption); // Set caption from the fetched data
       } catch (error) {
@@ -38,7 +38,7 @@ function EditPost() {
   const handleSubmit = async () => {
     try {
       // Example POST request to update the post with the new caption
-      const response = await axios.put(`http://127.0.0.1:8001/api/post/${post._id}/update/`, {
+      const response = await axios.put(`http://127.0.0.1:8001/api/home/post/${post._id}/update/`, {
         caption: caption,
       });
       console.log('Post updated successfully:', response.data);

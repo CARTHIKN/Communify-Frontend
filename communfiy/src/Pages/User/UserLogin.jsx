@@ -44,7 +44,7 @@ const UserLogin = () => {
     };
 
     try {
-      const res = await axios.post(baseUrl + "/api/login/", formData, {
+      const res = await axios.post(baseUrl + "/api/accounts/login/", formData, {
         headers: {
           "Content-Type": "application/json",
         },

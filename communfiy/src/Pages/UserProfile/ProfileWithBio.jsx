@@ -20,7 +20,7 @@ function ProfileWithBio() {
     useEffect(() => {
         const fetchUserProfile = async () => {
           try {
-            const res = await axios.get(`${baseUrl}/api/user-profile-picture/${username}/`, {
+            const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${username}/`, {
               headers: {
                 "Content-Type": "application/json",
               },
@@ -37,7 +37,7 @@ function ProfileWithBio() {
 
         const fetchFollowerFollowingCount = async () => {
           try {
-              const res = await axios.get(`${baseUrl2}/api/user/friends-count/${username}/`);
+              const res = await axios.get(`${baseUrl2}/api/home/user/friends-count/${username}/`);
               if (res.status === 200) {
                 console.log("klsdjfkld");
                   setFollowersCount(res.data.followers_count);
