@@ -36,12 +36,19 @@ const PostUpload = (props) => {
     formData.append('username', username)
 
     console.log('FormData before Axios:', formData);
+    const token = localStorage.getItem("access");
+    // headers: {
+    //   Authorization: `Bearer ${token}`, // Note the space after Bearer
+    //   Accept: "application/json",
+    //   "Content-Type": "multipart/form-data" // Corrected typo in "application/json"
+    //   }
     
     console.log(formData)
     
     try {
       
       const res = await axios.post(baseUrl + "/api/home/create-post/", formData, { 
+       
       });
       console.log(res)
       if (res.status === 201) {

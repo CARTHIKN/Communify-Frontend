@@ -9,6 +9,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
   const [opened, setOpened] = useState(selectedUsername ? selectedUsername : null);
   const [userProfiles, setUserProfiles] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [lastMessages, setLastMessages] = useState({});
 
   const baseUrl2 = "http://127.0.0.1:8001";
   const baseUrl3 = "http://127.0.0.1:8002";
@@ -21,8 +22,6 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
         if (res.status === 200) {
           setChatRooms(res.data);
-          console.log(res.data);
-          console.log(chatrooms);
 
           const profilePromises = res.data.map(async (user) => {
             try {
@@ -49,13 +48,44 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
     fetchChatRooms();
   }, [baseUrl3, username]);
+
   useEffect(() => {
     if (selectedUsername && chatrooms.some(user => user.username === selectedUsername)) {
       setOpened(selectedUsername);
       onUserClick(selectedUsername);
-
     }
   }, [chatrooms, selectedUsername]);
+
+  useEffect(() => {
+    const fetchLastMessages = async () => {
+      const roomIds = chatrooms.map(room => room.id); // Assuming each room has an 'id' property
+  
+      try {
+        const lastMessagesData = await Promise.all(
+          roomIds.map(async roomId => {
+            try {
+              const res = await axios.get(baseUrl3 + `/api/chat/lastmessage/?roomid=${roomId}`);
+              return { roomId, message: res.data.content };
+            } catch (error) {
+              console.error(`Error fetching last message for room ${roomId}:`, error);
+              return { roomId, message: null }; // Return null if no message is found
+            }
+          })
+        );
+  
+        const lastMessagesMap = lastMessagesData.reduce((acc, messageData) => {
+          acc[messageData.roomId] = messageData.message;
+          return acc;
+        }, {});
+  
+        setLastMessages(lastMessagesMap);
+      } catch (error) {
+        console.error("Error fetching last messages:", error);
+      }
+    };
+  
+    fetchLastMessages();
+  }, [baseUrl3, chatrooms]);
 
   const handleUserClick = (username) => {
     setOpened(username);
@@ -64,7 +94,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
 
   const handleUserClick2 = () => {
     setOpened(selectedUsername);
-    onUserClick(selectedUsername); 
+    onUserClick(selectedUsername);
   };
 
   const handleSearch = (e) => {
@@ -88,32 +118,33 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
       </div>
 
       <div className="flex flex-col">
-      {selectedUsername && !chatrooms.some(user => user.username === selectedUsername) && !searchQuery && (
-  <div
-    onClick={handleUserClick2}
-    style={{ cursor: 'pointer' }}
-    className={`flex flex-row py-4 px-2 justify-center items-center border-b-2 border-zinc-300 ${opened === selectedUsername ? 'bg-blue-200' : ''}`}
-  >
-    <div className="w-1/4">
-      {profilePicture ? (
-        <img
-          src={profilePicture}
-          className="object-cover h-12 w-12 rounded-full"
-          alt=""
-        />
-      ) : (
-        <img
-          src={user2}
-          className="object-cover h-12 w-12 rounded-full"
-          alt="Default Profile"
-        />
-      )}
-    </div>
-    <div className="w-full">
-      <div className="text-lg font-semibold">{selectedUsername}</div>
-    </div>
-  </div>
-)}
+        {selectedUsername && !chatrooms.some(user => user.username === selectedUsername) && !searchQuery && (
+          <div
+            onClick={handleUserClick2}
+            style={{ cursor: 'pointer' }}
+            className={`flex flex-row py-4 px-2 justify-center items-center border-b-2 border-zinc-300 ${opened === selectedUsername ? 'bg-blue-200' : ''}`}
+          >
+            <div className="w-1/4">
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  className="object-cover h-12 w-12 rounded-full"
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={user2}
+                  className="object-cover h-12 w-12 rounded-full"
+                  alt="Default Profile"
+                />
+              )}
+            </div>
+            <div className="w-96">
+              <div className="text-lg font-semibold">{selectedUsername}</div>
+              <span className="text-gray-500 pr-10">{lastMessages[selectedUsername]}</span>
+            </div>
+          </div>
+        )}
 
         {filteredUsers.map((user, index) => (
           <div
@@ -139,7 +170,8 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
             </div>
             <div className="w-full">
               <div className="text-lg font-semibold">{user.username}</div>
-              <span className="text-gray-500">{user.description}</span>
+              <div className="text-lg font-semibold w-20"><span className="text-gray-500">{lastMessages[user.id]}</span></div>
+
             </div>
           </div>
         ))}

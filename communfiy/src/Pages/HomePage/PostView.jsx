@@ -11,11 +11,18 @@ function PostView({ refreshPosts }) {
  const [profileImages, setProfileImages] = useState({}); // State for profile images
  const navigate = useNavigate();
  const baseUrl = 'http://127.0.0.1:8001';
+ const token = localStorage.getItem("access");
+//  headers: {
+//   Authorization: `Bearer ${token}`, // Note the space after Bearer
+//   Accept: "application/json",
+//   "Content-Type": "multipart/form-data" // Corrected typo in "application/json"
+//   }
 
  useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(baseUrl + '/api/home/post-lists/');
+        const res = await axios.get(baseUrl + '/api/home/post-lists/',{
+          });
         if (Array.isArray(res.data)) {
           setPosts(res.data);
         } else if (typeof res.data === 'object') {

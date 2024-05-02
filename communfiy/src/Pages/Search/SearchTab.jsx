@@ -19,11 +19,19 @@ function SearchTab() {
     const [searchResults, setSearchResults] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const baseUrl = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("access");
+    console.log(token);
 
     const handleSearch = async (query) => {
         try {
             setIsLoading(true);
-            const response = await axios.get(baseUrl + `/api/accounts/search/?username=${query}`);
+            const response = await axios.get(baseUrl + `/api/accounts/search/?username=${query}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Note the space after Bearer
+                    Accept: "application/json",
+                    "Content-Type": "application/json", // Corrected typo in "application/json"
+                }
+            });
             setSearchResults(response.data.users);
             setIsLoading(false);
         } catch (error) {
