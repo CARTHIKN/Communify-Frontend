@@ -21,11 +21,11 @@ function Home() {
         <SideBar toggle={toggle} />
       </div>
 
-        <div className='ml-8 mt-12 sm:mt-12 sm:ml-20 sm:pl-20 md:mt-10 md:ml-22 md:mr-auto md:pl-20 lg:pt-4 lg:ml-5 lg:mr-40'>
+        <div className='ml-8 mt-12 sm:mt-12 sm:ml-20 sm:pl-20 md:mt-10 md:ml-22 md:mr-auto md:pl-20 lg:pt-4 lg:ml-36 lg:mr-10 '>
           <PostUpload toggle={toggle} setRefreshPosts={setRefreshPosts} />
         </div>
 
-        <div className='ml-8 sm:ml-20 sm:pl-20 md:ml-22 md:mr-auto md:pl-20 lg:ml-5 lg:mr-40 flex-grow'>
+        <div className='ml-8 sm:ml-20 sm:pl-20 md:ml-22 md:mr-auto md:pl-20 lg:ml-36 lg:mr-10 flex-grow'>
           <PostView refreshPosts={refreshPosts} />
         </div>
 

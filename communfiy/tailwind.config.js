@@ -13,12 +13,18 @@ export default {
         'custom4' : '20px',
         'custom5' :"600px",
         'custom6' : "450px",
+        'custom7' :"800px",
         
 
 
       },
       fontSize: {
         'smaller': '0.6rem', // Customize the size as needed
+      },
+      margin: {
+        'custom': '38rem', 
+        'custom1': '48rem', 
+
       },
     },
   },

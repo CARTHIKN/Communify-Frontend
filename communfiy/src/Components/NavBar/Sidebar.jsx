@@ -1,11 +1,119 @@
 
 import React, { useState,useEffect } from 'react';
+import { useSelector} from 'react-redux';
+// import { useChatNotification } from '../../Context/ChatNotificationContext';
+import { useChatNotification } from '../../Context/ChatNotificationContext';
+import axios from 'axios';
 
 export default function SideBar(props) {
+  // const { incrementChatNotificationCount } = useChatNotification();
+  const { chatNotificationCount,showNotification } = useChatNotification();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(props.toggle);
+  // const [socket, setSocket] = useState(null);
+  const [chatNotificationCounts, setChatNotificationCounts] = useState(0); 
+  const [notificationcount, setNotificationCount] = useState(0)
+  const username = useSelector((state) => state.authentication_user.username);
+  const baseUrl3 = "http://127.0.0.1:8002";
+  const baseUrl2 = "http://127.0.0.1:8001";
+
+
   useEffect(() => {
     setIsSidebarOpen(props.toggle);
   }, [props.toggle]);
+
+
+
+  // useEffect(() => {
+  //   // Establish WebSocket connection
+  //   const wsUrl = `ws://127.0.0.1:8002/ws/notify/${username}/`;
+  //   const ws = new WebSocket(wsUrl);
+  
+  //   // Set up event listeners
+  //   ws.onopen = () => {
+  //     console.log('WebSocket connection established.');
+  //   };
+  
+  //   ws.onmessage = (event) => {
+  //     console.log('Received message:', event.data);
+  //     const message = JSON.parse(event.data);
+  //     if (message.type === 'chat_notification') {
+  //       incrementChatNotificationCount();
+  //       console.log("helloooooooooooooo");
+  //       setNotificationCount((prevCount) => prevCount + 1);
+  //     }
+  //     // Handle incoming messages if needed
+  //   };
+  
+  //   ws.onerror = (error) => {
+  //     console.error('WebSocket error:', error);
+  //   };
+  
+  //   ws.onclose = () => {
+  //     console.log('WebSocket connection closed.');
+  //   };
+  
+  //   // Save the WebSocket connection to state
+  //   setSocket(ws);
+  
+  //   // Clean up on component unmount
+  //   return () => {
+  //     if (ws) {
+  //       ws.close();
+  //     }
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const response = await axios.get(baseUrl2 + '/api/home/user/notification-count/', {
+          params: {
+            username: username
+          }
+        });
+
+        console.log(response.data);
+        setNotificationCount(response.data.notification_count);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [showNotification]);
+
+  useEffect(() => {
+    try {
+      axios.get(`${baseUrl3}/api/chat/all-unseen-messages/${username}/`)
+        .then((res) => {
+          if (res.status === 200) {
+            setChatNotificationCounts(res.data);
+            console.log(res);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    console.log("hlllo");
+  }, [chatNotificationCount]);
+  
+  const markNotificationsAsSeen = async () => {
+    console.log("-----------------------------------------0");
+    try {
+        await axios.post('http://127.0.0.1:8001/api/home/user/mark-notification-as-seen/', {
+            username: username 
+        });
+        console.log("=================================================================");
+        setNotificationCount(0); 
+    } catch (error) {
+        console.error('Error marking notifications as seen:', error);
+    }
+};
 
   return (
     <div >
@@ -42,6 +150,27 @@ export default function SideBar(props) {
 
 
             <span class="flex-1 ms-3 whitespace-nowrap">Message</span>
+            {chatNotificationCounts > 0 && (
+              <span class="shrink-0 rounded-full bg-white px-2 font-mono text-xs font-medium tracking-tight text-black ml-2">{chatNotificationCounts}</span>
+                  // <span className="flex-1 ms-3 whitespace-nowrap"></span>
+            )}
+          </a>
+        </li>
+        <li>
+          <a href="/notification" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+            <path fill-rule="evenodd" d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z" clip-rule="evenodd" />
+          </svg>
+
+
+
+
+            <span class="flex-1 ms-3 whitespace-nowrap" onClick={markNotificationsAsSeen}>Notifications</span>
+            {notificationcount > 0 && (
+              <span class="shrink-0 rounded-full bg-white px-2 font-mono text-xs font-medium tracking-tight text-black ml-2"  >{notificationcount}</span>
+                  // <span className="flex-1 ms-3 whitespace-nowrap"></span>
+            )}
           </a>
         </li>
 

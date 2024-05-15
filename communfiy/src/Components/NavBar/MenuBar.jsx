@@ -4,16 +4,65 @@ import { set_Authentication } from '../../Redux/authentication/authenticationSli
 import { useNavigate,Link } from "react-router-dom";
 import userimg from "../../images/user.png"
 import axios from "axios";
+import { useChatNotification } from '../../Context/ChatNotificationContext';
+
 
 
 export default function MenuBar({ setToggle, toggle }) {
   // const authentication_user = useSelector((state) => state.authentication_user);
+  const { incrementChatNotificationCount,toggleShowNotification } = useChatNotification();
+
   const username = useSelector((state) => state.authentication_user.username);
   const [userData, setUserData] = useState(null);
   const dispatch = useDispatch()
+  const [socket, setSocket] = useState(null);
+  const [notificationCount, setNotificationCount] = useState(0); 
+
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const baseUrl = "http://127.0.0.1:8000";
+
+  useEffect(() => {
+    // Establish WebSocket connection
+    const wsUrl = `ws://127.0.0.1:8002/ws/notify/${username}/`;
+    const ws = new WebSocket(wsUrl);
+  
+    // Set up event listeners
+    ws.onopen = () => {
+      console.log('WebSocket connection established.');
+    };
+  
+    ws.onmessage = (event) => {
+      console.log('Received message:', event.data);
+      const message = JSON.parse(event.data);
+      if (message.type === 'chat_notification') {
+        incrementChatNotificationCount();
+        setNotificationCount((prevCount) => prevCount + 1);
+      }  else if (message.type === 'notification') {
+        toggleShowNotification();
+      }
+      
+    };
+  
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  
+    ws.onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+  
+    // Save the WebSocket connection to state
+    setSocket(ws);
+  
+    // Clean up on component unmount
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {

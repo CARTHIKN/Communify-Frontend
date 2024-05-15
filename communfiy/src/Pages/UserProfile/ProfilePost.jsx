@@ -7,6 +7,9 @@ function ProfilePost() {
   const username = useSelector((state) => state.authentication_user.username);
   const [posts, setPosts] = useState([]);
   const baseUrl = "http://127.0.0.1:8001";
+  const [activeTab, setActiveTab] = useState('yourPosts');
+  const [savedPostIds, setSavedPostIds] = useState([])
+  const [savedPosts, setSavedPosts] = useState([])
 
   useEffect(() => {
     const fetchUserPosts = async () => {
@@ -21,34 +24,98 @@ function ProfilePost() {
     fetchUserPosts();
   }, [username]);
 
-  const handlePostClick = (post) => {
-    console.log('Clicked Post:', post);
+  useEffect(() => {
+  
+    const fetchSavedPosts = async () => {
+      console.log("saved");
+      try {
+        const response = await axios.post(baseUrl +'/api/home/user/fetch-saved-post/', { username:username });
+        const { saved_posts } = response.data;
+        console.log(response.data,"----------====");
+        setSavedPostIds(saved_posts);
+      } catch (error) {
+        console.error('Error fetching saved posts:', error);
+      }
+    };
+    fetchSavedPosts()
+  }, []); 
+  
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab); 
+    if (tab === 'savedPosts') {
+      const fetchSavedPostsByIds = async () => {
+        try {
+          const fetchedPosts = [];
+          for (const postId of savedPostIds) {
+            const response = await axios.get(`${baseUrl}/api/home/post/${postId}`);
+            fetchedPosts.push(response.data); 
+            
+          }
+          setSavedPosts(fetchedPosts);
+          console.log(fetchedPosts);
+        } catch (error) {
+          console.error('Error fetching saved posts by ids:', error);
+        }
+      };
+
+      fetchSavedPostsByIds();
+    }
   };
+  console.log(savedPosts);
+
+  
 
   return (
     <div>
       <div className="flex justify-between items-center mb-10">
-        <button className="w-full py-2 border-b-2 border-zinc-400">
-          <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
+        <button
+          className={`w-full py-2 border-b-4  ${activeTab === 'yourPosts' ? 'border-zinc-400' : 'border-b-4'}`}
+          onClick={() => handleTabClick('yourPosts')} // Update active tab on click
+        >
+          Your Posts
+        </button>
+        <button
+          className={`w-full py-2 border-b-4 ${activeTab === 'savedPosts' ? 'border-zinc-400' : 'border-b-2'}`}
+          onClick={() => handleTabClick('savedPosts')} // Update active tab on click
+        >
+          Saved Posts
         </button>
       </div>
       <div className="grid grid-cols-3 gap-2 my-3">
-        {posts && posts.length > 0 ? (
-          posts.map((post) => (
-            <Link key={post.id} to={{ pathname: `/user/post/${post.id}`, state: { post } }} onClick={() => handlePostClick(post)}>
-              <div>
-                <a
-                  className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
-                  href="#"
-                  style={{ backgroundImage: `url('data:image/jpeg;base64,${post.image_url}')` }}
-                ></a>
-              </div>
-            </Link>
-          ))
+        {activeTab === 'yourPosts' ? (
+          posts && posts.length > 0 ? (
+            posts.map((post) => (
+              <Link key={post.id} to={{ pathname: `/user/post/${post.id}`, state: { post } }}>
+                <div>
+                  <a
+                    className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
+                    href="#"
+                    style={{ backgroundImage: `url('data:image/jpeg;base64,${post.image_url}')` }}
+                  ></a>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p>No posts found.</p>
+          )
         ) : (
-          <p>No posts found.</p>
+        
+          savedPosts && savedPosts.length > 0 ? (
+            savedPosts.map((post) => (
+              
+                <div>
+                  <a
+                    className="block bg-center bg-no-repeat bg-cover h-40 w-full rounded-lg"
+                    href="#"
+                    style={{ backgroundImage: `url('${post.image_url}')` }}
+                  ></a>
+                </div>
+              
+            ))
+          ) : (
+            <p>No saved posts found.</p>
+          )
         )}
       </div>
     </div>

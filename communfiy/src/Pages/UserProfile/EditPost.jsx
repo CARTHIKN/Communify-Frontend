@@ -11,12 +11,13 @@ function EditPost() {
   const [post, setPost] = useState(null);
   const [caption, setCaption] = useState('');
 
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8001/api/home/post/${postId}/`);
         setPost(response.data);
-        setCaption(response.data.caption); // Set caption from the fetched data
+        setCaption(response.data.caption);
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -34,6 +35,8 @@ function EditPost() {
   const handleCaptionChange = (event) => {
     setCaption(event.target.value); // Update caption state as user types
   };
+
+
 
   const handleSubmit = async () => {
     try {

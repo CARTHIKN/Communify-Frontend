@@ -11,6 +11,8 @@ function Chat() {
 
   // State to hold the selected username
   const [selectedUsername, setSelectedUsername] = useState(null);
+  const [socket,setSocket] = useState(null)
+  const [trigger,setTrigger] = useState(true)
 
   // Function to handle user click in ChatSideBar
   const handleUserClick = (username) => {
@@ -19,6 +21,7 @@ function Chat() {
   if (friendUsername && !selectedUsername) {
     setSelectedUsername(friendUsername);
   }
+  
   return (
     <div className='flex h-custom'>
       <MenuBar />
@@ -26,13 +29,16 @@ function Chat() {
         <ChatSideBar
           selectedUsername={friendUsername}
           profilePicture={profilePicture}
+          setSocket={setSocket}
+          socket={socket}
           onUserClick={handleUserClick} // Pass the click handler to ChatSideBar
+          trigger={trigger}
         />
       </div>
       <div className='flex flex-col flex-1 pt-12'>
         <div className='flex-1'>
           {/* Pass selectedUsername to ChatArea */}
-          <ChatArea selectedUsername={selectedUsername} />
+          <ChatArea selectedUsername={selectedUsername} socket={socket} setTrigger={setTrigger} trigger = {trigger}/>
         </div>
       </div>
     </div>

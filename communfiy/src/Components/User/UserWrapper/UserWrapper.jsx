@@ -16,6 +16,7 @@ import Search from "../../../Pages/Search/Search";
 import Chat from "../../../Pages/Chat/Chat";
 import UserPostView from "../../../Pages/UserProfile/UserPostView";
 import EditPost from "../../../Pages/UserProfile/EditPost";
+import Notification from "../../../Pages/Notification/Notification";
 
 
 
@@ -81,6 +82,16 @@ function UserWrapper() {
           element={
             <PrivateRoute>
               <Chat />
+            </PrivateRoute>
+          }
+          
+        
+        />
+        <Route
+          path="notification" // Dynamic route parameter for username
+          element={
+            <PrivateRoute>
+              <Notification/>
             </PrivateRoute>
           }
         />

@@ -2,14 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import user2 from "../../images/user2.jpg";
+import { useChatNotification } from '../../Context/ChatNotificationContext';
 
-function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
+
+function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,setSocket, trigger  }) {
+  const { chatNotificationCount } = useChatNotification();
   const username = useSelector((state) => state.authentication_user.username);
   const [chatrooms, setChatRooms] = useState([]);
   const [opened, setOpened] = useState(selectedUsername ? selectedUsername : null);
   const [userProfiles, setUserProfiles] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [lastMessages, setLastMessages] = useState({});
+  const [roomName, setRoomName] = useState(null);
+  const [sockett, setSockett] = useState(null);
+  const [unseenMessages, setUnseenMessages] = useState({});
+
+
 
   const baseUrl2 = "http://127.0.0.1:8001";
   const baseUrl3 = "http://127.0.0.1:8002";
@@ -19,10 +27,10 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
       const formData = { username: username };
       try {
         const res = await axios.post(baseUrl3 + '/api/chat/chatrooms/', formData);
-
+    
         if (res.status === 200) {
           setChatRooms(res.data);
-
+    
           const profilePromises = res.data.map(async (user) => {
             try {
               const profileRes = await axios.get(`http://127.0.0.1:8000/api/accounts/user-profile-picture/${user.username}`);
@@ -32,33 +40,55 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
               return { ...user, profilePicture: null };
             }
           });
-
+    
           const profiles = await Promise.all(profilePromises);
           const userProfileMap = profiles.reduce((acc, profile) => {
             acc[profile.username] = profile;
             return acc;
           }, {});
-
+    
           setUserProfiles(userProfileMap);
+    
+          // Fetch unseen messages for each room
+          const unseenMessagesPromises = res.data.map(async (room) => {
+            try {
+              const unseenRes = await axios.get(baseUrl3 + `/api/chat/unseen-messages/?roomid=${room.room_id}&username=${username}`);
+              return { roomId: room.room_id, count: unseenRes.data.count };
+            } catch (error) {
+              console.error(`Error fetching unseen messages for room ${room.room_id}:`, error);
+              return { roomId: room.room_id, count: 0 };
+            }
+          });
+    
+          const unseenMessagesData = await Promise.all(unseenMessagesPromises);
+          const unseenMessagesMap = unseenMessagesData.reduce((acc, messageData) => {
+            acc[messageData.roomId] = messageData.count;
+            return acc;
+          }, {});
+    
+          setUnseenMessages(unseenMessagesMap);
         }
       } catch (error) {
         console.error("Error fetching chat rooms:", error);
       }
     };
+    
 
     fetchChatRooms();
-  }, [baseUrl3, username]);
+    
+  }, [baseUrl3, username,socket, trigger,chatNotificationCount]);
 
   useEffect(() => {
     if (selectedUsername && chatrooms.some(user => user.username === selectedUsername)) {
       setOpened(selectedUsername);
       onUserClick(selectedUsername);
+      fetchRoom(selectedUsername)
     }
-  }, [chatrooms, selectedUsername]);
+  }, [selectedUsername]);
 
   useEffect(() => {
     const fetchLastMessages = async () => {
-      const roomIds = chatrooms.map(room => room.id); // Assuming each room has an 'id' property
+      const roomIds = chatrooms.map(room => room.room_id); // Assuming each room has an 'id' property
   
       try {
         const lastMessagesData = await Promise.all(
@@ -87,15 +117,86 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
     fetchLastMessages();
   }, [baseUrl3, chatrooms]);
 
-  const handleUserClick = (username) => {
-    setOpened(username);
-    onUserClick(username);
+  const fetchRoom = async (username2) => {
+    try {
+      const res = await axios.get(baseUrl3 + '/api/chat/findroom/', {
+        params: {
+          user1: username,
+          user2: username2,
+        },
+      });
+
+      if (res.status === 200) {
+        console.log("---------------------");
+        setRoomName(res.data.name);
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 406) {
+        console.log("error");
+      } else {
+        console.log("error-2");
+      }
+    }
   };
 
-  const handleUserClick2 = () => {
-    setOpened(selectedUsername);
-    onUserClick(selectedUsername);
+  useEffect(() => {
+    
+    if (roomName) {
+      if (socket!==null){
+        socket.close()
+      }
+      const wsUrl = `ws://127.0.0.1:8002/ws/chat/${roomName}/${username}/`;
+      const ws = new WebSocket(wsUrl);
+      // setSocket(ws)
+  
+      ws.onopen = () => {
+       
+        console.log('WebSocket connection established.');
+        setSocket(ws); // Save the WebSocket connection to state
+      };
+  
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+  
+      ws.onclose = () => {
+        console.log('WebSocket connection closed.');
+        setSocket(null)
+      };
+    }
+  }, [roomName]);
+
+
+  const handleUserClick = async (username3) => {
+    setOpened(username3);
+    onUserClick(username3);
+    
+    // Fetch the room name and wait for the response
+    console.log('Before fetchRoom:', roomName);
+    await fetchRoom(username3);
+    console.log('After fetchRoom:', roomName);
+    
+    // Now that roomName is set, create the WebSocket connectio
   };
+
+  const handleUserClick2 =  async () => {
+    // setOpened(selectedUsername);
+    // onUserClick(selectedUsername);
+    // await fetchRoom(selectedUsername)
+    console.log(roomName,"here");
+    
+
+  };
+  useEffect(() => {
+    if (selectedUsername) {
+      const fetchRoomAndSetSocket = async () => {
+        await fetchRoom(selectedUsername);
+        
+        // createWebSocket();
+      };
+      fetchRoomAndSetSocket();
+    }
+  }, [selectedUsername]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -149,7 +250,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
         {filteredUsers.map((user, index) => (
           <div
             key={index}
-            className={`flex flex-row py-4 px-2 justify-center items-center border-b-2 border-zinc-300 ${opened === user.username ? 'bg-blue-200' : ''}`}
+            className={`flex flex-row py-4 px-4 justify-center items-center border-b-2 border-zinc-300 ${opened === user.username ? 'bg-blue-200' : ''}`}
             onClick={() => handleUserClick(user.username)}
             style={{ cursor: 'pointer' }}
           >
@@ -169,8 +270,17 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick }) {
               )}
             </div>
             <div className="w-full">
-              <div className="text-lg font-semibold">{user.username}</div>
-              <div className="text-lg font-semibold w-20"><span className="text-gray-500">{lastMessages[user.id]}</span></div>
+              <div className="text-lg mr-10 font-semibold">{user.username}</div>
+              <div className="text-xs font-semibold w-20 ml-20 mr-24 mtext-center"><span className="text-gray-500">{ lastMessages[user.room_id]}</span>
+              {unseenMessages[user.room_id] > 0 && (
+                 <span class="shrink-0 rounded-full bg-indigo-500 px-2 font-mono text-md font-medium tracking-tight text-white ml-2">
+                  {unseenMessages[user.room_id]}
+               </span>
+            
+                
+              )}
+              
+              </div>
 
             </div>
           </div>

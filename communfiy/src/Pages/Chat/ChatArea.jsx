@@ -3,7 +3,7 @@
   import axios from "axios";
   import { formatDistanceToNow } from 'date-fns';
 
-  function ChatArea({ selectedUsername }) {
+  function ChatArea({ selectedUsername, socket,setTrigger,trigger }) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState('');
     const [roomName, setRoomName] = useState(null);
@@ -13,6 +13,7 @@
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
+
 
     const handleMessageChange = (e) => {
       setMessage(e.target.value);
@@ -39,6 +40,7 @@
     };
 
     const handleSendClick = async () => {
+      console.log(socket,"--------------------------");
       if (roomName) {
         let content = message;
         if (selectedImage) {
@@ -79,31 +81,49 @@
     };
 
     const sendMessage = (content, m_type) => {
-      const webSocket = new WebSocket(`${wsBaseUrl}${roomName}/${username}/`);
+      // const webSocket = new WebSocket(`${wsBaseUrl}${roomName}/${username}/`);
 
-      webSocket.onopen = () => {
-        console.log('WebSocket connection established.');
-        const data = {
-          message: content,
-          m_type: m_type,
-        };
+      // socket.onopen = () => {
+      //   console.log('WebSocket connection established.');
+        
         try {
-          webSocket.send(JSON.stringify(data));
+          const data = {
+            message: content,
+            m_type: m_type,
+          };
+          console.log(data);
+          socket.send(JSON.stringify(data));
           setMessage('');
+          // fetchChatRooms();
+          setTrigger(!trigger)
         } catch (error) {
           console.error('Error sending message:', error);
         }
-      };
-
-      webSocket.onmessage = (event) => {
-        console.log('Message received:', event.data);
-        fetchMessages();
-      };
-
-      webSocket.onclose = () => {
+        
+      socket.onclose = () => {
         console.log('WebSocket connection closed.');
       };
     };
+
+if (socket!==null){
+    socket.onmessage = (event) => {
+      console.log('Message received:', event.data, "--------------------");
+      fetchMessages();
+      setTrigger(!trigger)
+
+      axios.post(baseUrl+ '/api/chat/mark-messages-as-seen/', {
+        room_name: roomName,  
+        username: username     
+      })
+      .then(response => {
+        console.log('Messages marked as seen:', response.data);
+      })
+      .catch(error => {
+        console.error('Error marking messages as seen:', error);
+      });
+      
+    };
+  }
 
     const handleKeyPress = (e) => {
       if (e.key === 'Enter') {
@@ -111,21 +131,23 @@
         handleSendClick();
       }
     };
+    
 
     useEffect(() => {
       if (selectedUsername) {
         fetchRoom();
       }
-    }, [selectedUsername, username, message]);
+    }, [selectedUsername, username]);
 
     useEffect(() => {
       if (roomName) {
         fetchMessages();
       }
-    }, [roomName]);
+    }, [roomName,socket]);
 
     const fetchRoom = async () => {
       try {
+        console.log("sdfjasdfklasdfjkljlsdf");
         const res = await axios.get(baseUrl + '/api/chat/findroom/', {
           params: {
             user1: username,
@@ -147,6 +169,7 @@
     };
 
     const fetchMessages = async () => {
+      console.log(roomName,"--------------------");
       try {
         const res = await axios.get(baseUrl + '/api/chat/messages/', {
           params: {
@@ -161,7 +184,7 @@
         console.error('Error fetching messages:', error);
       }
     };
-
+    
     return (
       <div>
         {selectedUsername ? (
@@ -190,7 +213,7 @@
                     </div>
                   ) : (
                     // Render text message
-                    <div className={`pt-1 px-2 bg-${msg.user.username === username ? 'blue' : 'gray'}-400 rounded-bl-xl rounded-tl-xl rounded-tr-xl text-white`}>
+                    <div className={`pt-1 px-2 bg-${msg.user.username === username ? 'blue' : 'blue'}-400 rounded-bl-xl rounded-tl-xl rounded-tr-xl text-white`}>
                       {msg.content}
                       <div className="text-smaller text-zinc-200">
                         {formatDistanceToNow(new Date(msg.timestamp), { addSuffix: true })}
