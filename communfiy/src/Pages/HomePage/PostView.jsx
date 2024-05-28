@@ -19,6 +19,14 @@ function PostView({ refreshPosts }) {
  const [replyToCommentId, setReplyToCommentId] = useState(null); 
  const [replyContent, setReplyContent] = useState(''); 
  const [savedPostIds, setSavedPostIds] = useState([])
+ const [showConfirmation, setShowConfirmation] = useState(false);
+ const [reportType, setReportType] = useState(null);
+ const [reportPostId, setReportPostId] = useState(null)
+ const [reportCommentId, setReportCommentId] = useState(null)
+ const [successMessage, setSuccessMessage] = useState('');
+
+
+
 
 
  useEffect(() => {
@@ -29,8 +37,7 @@ function PostView({ refreshPosts }) {
           username: username, 
         }
       );
-      console.log(response);
-      console.log(response.data);
+
       setLikedPostIds(response.data);
     } catch (error) {
       console.error('Error fetching liked posts:', error);
@@ -43,7 +50,6 @@ function PostView({ refreshPosts }) {
 useEffect(() => {
   
   const fetchSavedPosts = async () => {
-    console.log("saved");
     try {
       const response = await axios.post(baseUrl +'/api/home/user/fetch-saved-post/', { username:username });
       const { saved_posts } = response.data;
@@ -62,7 +68,6 @@ useEffect(() => {
       try {
         const response = await axios.get(`${baseUrl}/api/home/user/like-comments-count/?post_id=${post.id}`);
         const { likes_count, comments_count } = response.data;
-        console.log(response.data,"----------------------");
         const updatedPost = { ...post, likes_count, comments_count };
         updatedPosts.push(updatedPost);
       } catch (error) {
@@ -79,7 +84,6 @@ useEffect(() => {
   }
 }, [likedPostIds,comment,comments,loading]);
 
-console.log(posts, "--------------------------------------");
 
 const handleReplySubmit = async (parentCommentId, parendUsername) => {
   try {
@@ -179,9 +183,7 @@ const handleReplyClick = async (commentId) => {
 
  const handlecomments = (event) => {
   // Log the value being set instead of the entire state
-  console.log(event.target.value, "comment value");
   setComment(event.target.value);
-  console.log(comment,"====");
 };
  
 
@@ -190,7 +192,6 @@ const handleReplyClick = async (commentId) => {
     console.log("---------------------------");
       const res = await axios.post(baseUrl + '/api/home/user/post/like/', { postId, username },);
       if (res.status === 200 || res.status === 201) {
-         console.log("sucess");
          if (likedPostIds.includes(postId)) {
 
           setLikedPostIds(prevState => prevState.filter(id => id !== postId));
@@ -225,16 +226,13 @@ const handleReplyClick = async (commentId) => {
       post_id: post_id,
       content: comment,
     });
-    console.log(response);
     // Assuming response.data is the newly added comment object
     const res = await axios.get(baseUrl + `/api/home/user/comment/${post_id}`);
-    console.log(response);
 
     // Assuming response.data is a JSON string, parse it into an array
     const parentComments = JSON.parse(res.data);
     const requests = parentComments.map(async (comment) => {
       const repliedCommentsResponse = await axios.get(`${baseUrl}/api/home/user/comment/replied-comments/?parent_comment_id=${comment._id}`);
-      console.log(repliedCommentsResponse.data);
       const repliedComments = repliedCommentsResponse.data.replied_comments;
       return { ...comment, repliedComments };
     });
@@ -276,7 +274,6 @@ const handleCommentIconClick = async (post_id) => {
     // Fetch replied comments for each parent comment
     const requests = parentComments.map(async (comment) => {
       const repliedCommentsResponse = await axios.get(`${baseUrl}/api/home/user/comment/replied-comments/?parent_comment_id=${comment._id}`);
-      console.log(repliedCommentsResponse.data);
       const repliedComments = repliedCommentsResponse.data.replied_comments;
       return { ...comment, repliedComments };
     });
@@ -285,7 +282,6 @@ const handleCommentIconClick = async (post_id) => {
 
     // Update state with both parent comments and their replied comments
     setComments(allCommentsWithReplies);
-    console.log(comments, "==============================");
     setShowCommentInput((prev) => (prev === post_id ? null : post_id));
   } catch (error) {
     console.error('Error fetching comments:', error);
@@ -297,7 +293,6 @@ const handleSaveClick = async  (post_id) => {
     
       const res = await axios.post(baseUrl + '/api/home/user/save-post/', { postId : post_id, username:username },);
       if (res.status === 200 || res.status === 201) {
-        console.log("sucess");
         if (savedPostIds.includes(post_id)) {
 
          setSavedPostIds(prevState => prevState.filter(id => id !== post_id));
@@ -311,8 +306,48 @@ const handleSaveClick = async  (post_id) => {
   }
 
 }
-console.log(savedPostIds,"00000000000000009999999999999999999999");
+const handlePostReport = async (postid) => {
+  setReportType("post")
+  setReportPostId(postid)
+  setShowConfirmation(true); 
+};
+const handleCommentReport = async (commentid) => {
+  setReportType("comment")
+  setReportCommentId(commentid)
+  setShowConfirmation(true); 
+};
 
+const confirmReport = async () => {
+if (reportType ==='post'){
+  try {
+    await axios.post('http://127.0.0.1:8001/api/home/user/post-report/' ,{ post_id : reportPostId, reported_by:username},);
+    setShowConfirmation(false);
+    setReportPostId(null)
+    setSuccessMessage('Post reported successfully.');
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 1000);
+  } catch (error) {
+    console.error('Error Reporting post:', error);
+  }
+} else if (reportType ==='comment') {
+  try {
+    await axios.post('http://127.0.0.1:8001/api/home/user/comment-report/' ,{ comment_id : reportCommentId, reported_by:username},);
+    setShowConfirmation(false);
+    setReportCommentId(null)
+    setSuccessMessage('Comment reported successfully.');
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 1000);
+  } catch (error) {
+    console.error('Error Reporting Comment:', error);
+  }
+}
+};
+
+const cancelReport = () => {
+  setShowConfirmation(false); // Hide confirmation modal if user cancels deletion
+};
  return (
     <div className="w-full flex flex-row flex-wrap justify-center bg-zinc-200 ">
       <div className="w-full h-auto flex flex-row flex-wrap justify-center bg-zinc-200">
@@ -329,6 +364,20 @@ console.log(savedPostIds,"00000000000000009999999999999999999999");
                  <div className='pl-2 mt-' onClick={() => handleUsernameClick(post.username)}>
                     <a href="#" className="text-zinc-500 text-lg">{post.username}</a>
                  </div>
+                 <div className='flex justify-end w-full'>
+                    <div class="relative inline-block group">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                      </svg>
+                      <div class="absolute right-0 hover:bg-gray-100 w-22 bg-zinc-200 border border-gray-300 rounded-lg shadow-lg hidden group-hover:block">
+                        <ul class="p-2">
+                          <li class="hover:bg-gray-100 text-xs cursor-pointer" onClick={() => handlePostReport(post.id)}>Report</li>
+
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
                 {post.image_url && (
                  <img
@@ -423,6 +472,7 @@ console.log(savedPostIds,"00000000000000009999999999999999999999");
                           <div className="flex items-center mt-1 ml-2 mb-1">
                             <p className="text-gray-500 text-xs mr-2"> {comment.created_at}</p>
                             <button className="text-indigo-500 text-xs ml-custom" onClick={() => handleReplyClick(comment._id)}>Reply</button>
+                            <button className="text-zinc-500 text-xs ml-4" onClick={() => handleCommentReport(comment._id)}>Report</button>
                           </div>
                           {replyToCommentId === comment._id && (
                             <div className="relative mt-4 mb-4 ml-2 mr-10">
@@ -550,6 +600,19 @@ console.log(savedPostIds,"00000000000000009999999999999999999999");
           </div>
         </div>
       </div>
+      {showConfirmation && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg">
+            <p className="text-lg font-semibold mb-3">Are you sure you want to report this {reportType}?</p>
+            <div className="flex justify-center">
+              <button onClick={confirmReport} className="bg-red-500 text-white px-4 py-2 rounded-lg mr-3">Yes</button>
+              <button onClick={cancelReport} className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg">No</button>
+            </div>
+          </div>
+        </div>
+      )}
+                  {successMessage && <div  className="fixed inset-0 flex ml-40 text-md justify-center text-white items-center bg-black bg-opacity-50">{successMessage}</div>}
+
     </div>
  );
 }

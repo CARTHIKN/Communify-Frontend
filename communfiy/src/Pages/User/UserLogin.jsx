@@ -41,13 +41,8 @@ const UserLogin = () => {
       if (res.status === 200 || res.status === 201) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        console.log(res.data);
-        const accessToken = localStorage.getItem("access");
-        const refreshToken = localStorage.getItem("refresh");
-        console.log(refreshToken);
-        console.log(accessToken);
-        console.log(res.data.username);
-        console.log(")))))))))))))))))))))))))))))))))))))))))");
+     
+       
   
         dispatch(
           set_Authentication({
@@ -61,7 +56,7 @@ const UserLogin = () => {
           state: res.data.message,
         });
   
-        console.log(res.data); // Print the response data to the console
+         // Print the response data to the console
         // Handle the response data as needed (e.g., store tokens in localStorage, navigate to another page)
       }
     } catch (error) {
@@ -75,7 +70,6 @@ const UserLogin = () => {
     if (isAuthenticated && isAdmin) {
       navigate("/admin/home");
     }
-    console.log("admmmmmmmmmmmmmmin", isAuthenticated, isAdmin)
   }, [isAuthenticated, isAdmin, navigate]);
 
 
@@ -83,7 +77,6 @@ const UserLogin = () => {
     if (isAuthenticated) {
       navigate("/home");
     }
-    console.log("homeeeeeeeeeeee")
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (event) => {
@@ -104,11 +97,8 @@ const UserLogin = () => {
       if (res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        const accessToken = localStorage.getItem("access");
-        const refreshToken = localStorage.getItem("refresh");
-        console.log(refreshToken)
-        console.log(accessToken)
-        console.log(")))))))))))))))))))))))))))))))))))))))))")
+
+ 
         
 
         dispatch(
@@ -119,11 +109,7 @@ const UserLogin = () => {
           })
         );
 
-        // localStorage.setItem("authInfo", JSON.stringify({
-        //   username: jwtDecode(res.data.access).username,
-        //   isAuthenticated: true,
-        //   isAdmin: res.data.isAdmin,
-        // }));
+  
 
         navigate("/home", {
           state: res.data.message,
@@ -141,24 +127,14 @@ const UserLogin = () => {
     }
   };
   useEffect(() => {
-    // Check if the user is authenticated and isAdmin
     if (isAuthenticated ) {
       navigate("/home");
     }
   }, [isAuthenticated,navigate]);
 
-  const handleGoogleLogin = async (googleUser) => {
-    const idToken = googleUser.getAuthResponse().id_token;
-    // Send idToken to your backend for verification and user creation/login
-    // Example:
-    // const res = await axios.post(baseUrl + '/api/accounts/google-login/', { id_token: idToken });
-    // Handle response and navigate accordingly
-  };
+
   
-  const handleGoogleLoginFailure = (error) => {
-    console.error('Google authentication failed:', error);
-    // Handle failure, if needed
-  };
+ 
   return (
     <>
 

@@ -26,7 +26,6 @@ function ProfileWithBio() {
               },
             });
             if (res.status === 200) {
-              console.log("haiii", res.data);
               setUserData(res.data)
             }
             return res;
@@ -39,7 +38,6 @@ function ProfileWithBio() {
           try {
               const res = await axios.get(`${baseUrl2}/api/home/user/friends-count/${username}/`);
               if (res.status === 200) {
-                console.log("klsdjfkld");
                   setFollowersCount(res.data.followers_count);
                   setFollowingCount(res.data.following_count);
                   setPostCount(res.data.post_count)

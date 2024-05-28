@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useState,useEffect } from "react";
 
 function Registration_Otp() {
-  console.log("---------------------------")
   const navigate = useNavigate();
   const location = useLocation();
   const [formError, setFormError] = useState([]);
@@ -12,7 +11,6 @@ function Registration_Otp() {
   const email = location.state?.email;
   const isForChangePassword = location.state?.isForChangePassword;
  
-  console.log("---------------------------")
   useEffect(() => {
     // Check if email and isForChangePassword are present
     if (!email || isForChangePassword === undefined) {
@@ -26,7 +24,6 @@ function Registration_Otp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormError([]);
-    console.log(formError);
     const formData = {
       email : email,
       otp: event.target.otp.value,
@@ -39,7 +36,6 @@ function Registration_Otp() {
         },
       });
       if (res.status === 200) {
-        console.log("nothingggggg");
         if (isForChangePassword) {
           navigate("/change-password",{state : {email:email},replace: true,});
         } else {

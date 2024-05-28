@@ -4,6 +4,9 @@ import AdminHome from '../../Pages/Admin/AdminHome';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AdminPrivateRoute from '../PrivateRoutes/AdminPrivateRoute';
+import PostReport from '../../Pages/Admin/PostReport';
+import AdminPostView from '../../Pages/Admin/AdminPostView';
+import CommentReport from '../../Pages/Admin/CommentReport';
 
 function AdminWrapper() {
     const isAuthenticated =useSelector((state) => state.authentication_user.isAuthenticated);
@@ -17,6 +20,13 @@ function AdminWrapper() {
       <Route path="" element={<AdminLogin/>}></Route>
 
       <Route path="home" element= { <AdminPrivateRoute><AdminHome/></AdminPrivateRoute> }></Route>
+      
+      <Route path="post-report" element= { <AdminPrivateRoute><PostReport/></AdminPrivateRoute> }></Route>
+      <Route path="post-view/:postId" element= { <AdminPrivateRoute><AdminPostView/></AdminPrivateRoute> }></Route>
+
+      <Route path="comment-report" element= { <AdminPrivateRoute><CommentReport/></AdminPrivateRoute> }></Route>
+
+
       
 
       </Routes>

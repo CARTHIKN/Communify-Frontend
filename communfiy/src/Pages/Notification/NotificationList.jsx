@@ -21,7 +21,6 @@ const NotificationList = () => {
                     }
                 });
                 // Assuming response.data is already an array of objects
-                console.log(response.data);
                 setNotifications(response.data);
             } catch (error) {
                 console.error('Error fetching notifications:', error);

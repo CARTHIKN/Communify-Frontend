@@ -12,7 +12,6 @@ function OthersPost(props) {
       try {
         const response = await axios.get(baseUrl +`/api/home/user/posts/?username=${username}`);
         setPosts(response.data.posts);
-        console.log("posts",posts)
       } catch (error) {
         console.error('Error fetching user posts:', error);
       }

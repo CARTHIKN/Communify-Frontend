@@ -33,8 +33,7 @@ function AdminLogin() {
       if (res.status === 200) {
         localStorage.setItem("access", res.data.access);
         localStorage.setItem("refresh", res.data.refresh);
-        console.log(res.data.access);
-        console.log(res.data.refresh);
+ 
 
         dispatch(
           set_Authentication({

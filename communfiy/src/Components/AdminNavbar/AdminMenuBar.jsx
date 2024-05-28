@@ -14,29 +14,7 @@ export default function AdminMenuBar({ setToggle, toggle }) {
   const navigate = useNavigate()
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const baseUrl = "http://127.0.0.1:8000";
-//   useEffect(() => {
-//     const fetchUserProfile = async () => {
-//       try {
-//         const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${username}/`, {
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         });
-//         if (res.status === 200) {
-//           console.log("''''''''''''''''''''''''''''''''''''''''''''''''''''''");
-//           console.log(res.data);
-//           setUserData(res.data)
-//         }
-//         return res;
-//       } catch (error) {
-//         console.error("Error fetching user profile:", error);
-//       }
-//     };
-  
-//     fetchUserProfile();
-//   }, [baseUrl, username]);
-  
-  
+
    const handleToggle = ()=>{
     setToggle(!toggle)
    }
@@ -93,11 +71,7 @@ export default function AdminMenuBar({ setToggle, toggle }) {
               </svg>
             </button>
             <a href="/" className="flex ms-2 md:me-24">
-              <img
-                src="https://flowbite.com/docs/images/logo.svg"
-                className="h-8 me-3"
-                alt="FlowBite Logo"
-              />
+              
               <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                 Communify
               </span>

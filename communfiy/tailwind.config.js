@@ -22,8 +22,10 @@ export default {
         'smaller': '0.6rem', // Customize the size as needed
       },
       margin: {
-        'custom': '38rem', 
-        'custom1': '48rem', 
+        'custom': '42rem', 
+        'custom1': '48rem',
+        'custom2': '47rem', 
+
 
       },
     },

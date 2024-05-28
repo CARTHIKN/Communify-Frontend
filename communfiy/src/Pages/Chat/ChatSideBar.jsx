@@ -5,7 +5,7 @@ import user2 from "../../images/user2.jpg";
 import { useChatNotification } from '../../Context/ChatNotificationContext';
 
 
-function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,setSocket, trigger  }) {
+function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,setSocket, trigger,setRoomNamee  }) {
   const { chatNotificationCount } = useChatNotification();
   const username = useSelector((state) => state.authentication_user.username);
   const [chatrooms, setChatRooms] = useState([]);
@@ -78,13 +78,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,set
     
   }, [baseUrl3, username,socket, trigger,chatNotificationCount]);
 
-  useEffect(() => {
-    if (selectedUsername && chatrooms.some(user => user.username === selectedUsername)) {
-      setOpened(selectedUsername);
-      onUserClick(selectedUsername);
-      fetchRoom(selectedUsername)
-    }
-  }, [selectedUsername]);
+
 
   useEffect(() => {
     const fetchLastMessages = async () => {
@@ -127,8 +121,8 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,set
       });
 
       if (res.status === 200) {
-        console.log("---------------------");
         setRoomName(res.data.name);
+        setRoomNamee(res.data.name)
       }
     } catch (error) {
       if (error.response && error.response.status === 406) {
@@ -170,33 +164,22 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,set
   const handleUserClick = async (username3) => {
     setOpened(username3);
     onUserClick(username3);
-    
-    // Fetch the room name and wait for the response
-    console.log('Before fetchRoom:', roomName);
     await fetchRoom(username3);
-    console.log('After fetchRoom:', roomName);
     
-    // Now that roomName is set, create the WebSocket connectio
   };
 
-  const handleUserClick2 =  async () => {
-    // setOpened(selectedUsername);
-    // onUserClick(selectedUsername);
-    // await fetchRoom(selectedUsername)
-    console.log(roomName,"here");
-    
 
-  };
   useEffect(() => {
     if (selectedUsername) {
-      const fetchRoomAndSetSocket = async () => {
-        await fetchRoom(selectedUsername);
+      const fetchRoomAndSetSocket =  () => {
+        fetchRoom(selectedUsername);
+        
         
         // createWebSocket();
       };
       fetchRoomAndSetSocket();
     }
-  }, [selectedUsername]);
+  }, []);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -221,7 +204,7 @@ function ChatSideBar({ selectedUsername, profilePicture, onUserClick, socket,set
       <div className="flex flex-col">
         {selectedUsername && !chatrooms.some(user => user.username === selectedUsername) && !searchQuery && (
           <div
-            onClick={handleUserClick2}
+            // onClick={handleUserClick2}
             style={{ cursor: 'pointer' }}
             className={`flex flex-row py-4 px-2 justify-center items-center border-b-2 border-zinc-300 ${opened === selectedUsername ? 'bg-blue-200' : ''}`}
           >

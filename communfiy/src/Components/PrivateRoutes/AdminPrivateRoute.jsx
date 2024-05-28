@@ -14,13 +14,11 @@ function AdminPrivateRoute({children}) {
     useEffect(()=>{
         const fetchData = async () => {
             const authInfo = await isAuthAdmin();
-            console.log(authInfo)
             setIsAuthenticate({
                 'is_authenticated' :authInfo.isAuthenticated,
                 'is_admin': authInfo.isAdmin,
             });
             setLoading(false);
-            console.log()
         };
         fetchData();
     },[])
@@ -30,18 +28,14 @@ function AdminPrivateRoute({children}) {
     }
 
     if (!isAuthenticate.is_authenticated){
-        console.log("here");
         return <Navigate to="/admin/"/>;
     }
 
     if ((!isAuthenticate.is_admin)){
-        console.log("herll");
-        console.log(isAuthenticate.is_admin)
         return <Navigate to="/admin"/>;
     }
 
     if ((isAuthenticate && !isAuthenticate.is_admin)){
-        console.log("heree");
         return <Navigate to="/home"/>;
 
     }

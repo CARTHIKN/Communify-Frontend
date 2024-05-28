@@ -13,7 +13,6 @@ function PrivateRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const isAdmin = useSelector((state) => state.authentication_user.isAdmin);
-  console.log("isAdmin", isAdmin);
 
   useEffect(() => {
     const fetchData = async () => {

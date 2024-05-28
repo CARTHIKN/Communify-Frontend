@@ -9,7 +9,6 @@ function ChangePassword() {
     const navigate = useNavigate();
     const baseUrl = "http://127.0.0.1:8000";
     const email = location.state?.email;
-    console.log(email)
     useEffect(() => {
         // Check if email and isForChangePassword are present
         if (email === undefined) {
@@ -59,12 +58,9 @@ function ChangePassword() {
             // return res;
           }
         } catch (error) {
-        console.log(error.response)
           if (error.response && error.response.status === 406) {
-            console.log(error.response)
             setFormError(error.response.data.message);
           } else {
-            console.log(error.response)
             setFormError(error.response);
           }
         }

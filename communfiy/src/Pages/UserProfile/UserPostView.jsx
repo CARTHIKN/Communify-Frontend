@@ -60,7 +60,6 @@ function UserPostView() {
           },
         });
         setUserLikesPost(response.data.user_likes);
-        console.log(response.data);
       } catch (error) {
         console.error('Error checking if user likes post:', error);
       }
@@ -80,7 +79,6 @@ function UserPostView() {
           },
         });
         const { likes_count, comments_count } = response.data;
-        console.log(response.data,"--------------------------");
         setLikeCount(likes_count);
         setCommentCount(comments_count);
       } catch (error) {
@@ -112,7 +110,6 @@ function UserPostView() {
         const res = await axios.post('http://127.0.0.1:8001/api/home/user/post/like/', { postId: postId, username:username },);
         if (res.status === 200 || res.status === 201) {
           setUserLikesPost(!userLikesPost)
-          console.log(res.data);
            
         }
     } catch (error) {
@@ -151,9 +148,6 @@ function UserPostView() {
       
       await fetchRepliedComments();
       setShowComment(!showComment);
-      setReplyingTo(null);
-      console.log(comments);
-      console.log(mainCommentsData);
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
@@ -165,7 +159,6 @@ function UserPostView() {
         post_id: postId,
         content: comment,
       });
-      console.log(response.data);
       setComment('');
   
       // Fetch updated main comments
@@ -188,7 +181,6 @@ function UserPostView() {
       };
   
       await fetchRepliedComments();
-      console.log(comments);
       setComments(mainCommentsData);
 
   
@@ -206,7 +198,6 @@ function UserPostView() {
 
   const handleReplySubmit = async (parent_Username,post_id) => {
     try {
-      console.log(parent_Username);
       const response = await axios.post('http://127.0.0.1:8001/api/home/user/comment/reply/', {
         username: username,
         parent_comment_id: replyingTo,
@@ -215,7 +206,6 @@ function UserPostView() {
         post_id:post_id
 
       });
-      console.log(response.data);
       setReplyingTo(null); // Reset replyingTo state after successful reply
       setReplyContent('');
       // Fetch updated comments after replying
@@ -238,7 +228,6 @@ function UserPostView() {
       };
   
       await fetchRepliedComments();
-      console.log(comments);
       setComments(mainCommentsData);
     } catch (error) {
       console.error('Error replying to comment:', error);

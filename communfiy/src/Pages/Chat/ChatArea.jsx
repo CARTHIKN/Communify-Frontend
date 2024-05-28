@@ -3,7 +3,7 @@
   import axios from "axios";
   import { formatDistanceToNow } from 'date-fns';
 
-  function ChatArea({ selectedUsername, socket,setTrigger,trigger }) {
+  function ChatArea({ selectedUsername, socket,setTrigger,trigger, roomNamee }) {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState('');
     const [roomName, setRoomName] = useState(null);
@@ -40,15 +40,13 @@
     };
 
     const handleSendClick = async () => {
-      console.log(socket,"--------------------------");
-      if (roomName) {
+      if (roomNamee) {
         let content = message;
         if (selectedImage) {
           setIsLoading(true);
           const imageLink = await uploadImageToCloudinary(selectedImage);
           content = imageLink;
-          console.log(content);
-          setSelectedImage(null); // Clear selected image after sending
+          setSelectedImage(null); 
           fileInputRef.current.value = ''; 
           setIsLoading(false);
         }
@@ -81,10 +79,7 @@
     };
 
     const sendMessage = (content, m_type) => {
-      // const webSocket = new WebSocket(`${wsBaseUrl}${roomName}/${username}/`);
-
-      // socket.onopen = () => {
-      //   console.log('WebSocket connection established.');
+     
         
         try {
           const data = {
@@ -107,12 +102,11 @@
 
 if (socket!==null){
     socket.onmessage = (event) => {
-      console.log('Message received:', event.data, "--------------------");
       fetchMessages();
       setTrigger(!trigger)
 
       axios.post(baseUrl+ '/api/chat/mark-messages-as-seen/', {
-        room_name: roomName,  
+        room_name: roomNamee,  
         username: username     
       })
       .then(response => {
@@ -133,47 +127,12 @@ if (socket!==null){
     };
     
 
-    useEffect(() => {
-      if (selectedUsername) {
-        fetchRoom();
-      }
-    }, [selectedUsername, username]);
-
-    useEffect(() => {
-      if (roomName) {
-        fetchMessages();
-      }
-    }, [roomName,socket]);
-
-    const fetchRoom = async () => {
-      try {
-        console.log("sdfjasdfklasdfjkljlsdf");
-        const res = await axios.get(baseUrl + '/api/chat/findroom/', {
-          params: {
-            user1: username,
-            user2: selectedUsername,
-            message: message,
-          },
-        });
-
-        if (res.status === 200) {
-          setRoomName(res.data.name);
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 406) {
-          console.log("error");
-        } else {
-          console.log("error-2");
-        }
-      }
-    };
-
+    
     const fetchMessages = async () => {
-      console.log(roomName,"--------------------");
       try {
         const res = await axios.get(baseUrl + '/api/chat/messages/', {
           params: {
-            room: roomName,
+            room: roomNamee,
           },
         });
 
@@ -184,6 +143,12 @@ if (socket!==null){
         console.error('Error fetching messages:', error);
       }
     };
+
+    
+
+    useEffect(() => {
+      fetchMessages()
+    }, [roomNamee]);
     
     return (
       <div>

@@ -72,7 +72,6 @@ export default function MenuBar({ setToggle, toggle }) {
           },
         });
         if (res.status === 200) {
-          console.log(res.data);
           setUserData(res.data)
         }
         return res;
@@ -105,8 +104,6 @@ export default function MenuBar({ setToggle, toggle }) {
 
    const handleDropdownToggle = () => {
     setDropdownOpen(!dropdownOpen);
-    console.log("haiiiii")
-    console.log(username);
   };
  
   return (

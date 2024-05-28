@@ -62,7 +62,6 @@ function FriendsProfileWithBio(props) {
       useEffect(() => {
         const fetchUserProfile = async () => {
           try {
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
             const res = await axios.get(`${baseUrl}/api/accounts/user-profile-picture/${friend_username}/`, {
               headers: {
                 "Content-Type": "application/json",
@@ -83,7 +82,6 @@ function FriendsProfileWithBio(props) {
             try {
                 const res = await axios.get(`${baseUrl2}/api/home/user/friends-count/${friend_username}/`);
                 if (res.status === 200) {
-                  console.log("klsdjfkld");
                     setFollowersCount(res.data.followers_count);
                     setFollowingCount(res.data.following_count);
                     setPostCount(res.data.post_count)

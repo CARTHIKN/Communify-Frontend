@@ -11,22 +11,7 @@ function FriendsProfile() {
   const { username } = useParams(); // Get the username from the URL
   const [friendData, setFriendData] = useState(null);
 
-//   useEffect(() => {
-//     const fetchFriendData = async () => {
-//       try {
-//         const res = await axios.get(`http://your-api-url/${username}`); // Replace 'your-api-url' with your actual API endpoint
-//         setFriendData(res.data);
-//       } catch (error) {
-//         console.log('Error fetching friend data:', error);
-//       }
-//     };
 
-//     fetchFriendData();
-//   }, [username]); // Fetch data whenever the username changes
-
-//   if (!friendData) {
-//     return <div>Loading...</div>;
-//   }
 
   return (
     <div className='bg-zinc-200'>

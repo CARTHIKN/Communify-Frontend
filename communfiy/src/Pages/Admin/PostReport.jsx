@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import AdminMenuBar from '../../Components/AdminNavbar/AdminMenuBar'
 import AdminSideBar from '../../Components/AdminNavbar/AdminSideBar'
-import UserList from './UserList'
+import PostReportList from './PostReportList'
 
-function AdminHome() {
+
+function PostReport() {
     
     const [toggle, setToggle] = useState(false)
     
@@ -18,11 +19,11 @@ function AdminHome() {
         </div>
 
         <div className='pt-12 mt-2 sm:mt-12 md:mt-10 md:ml-22 md:mr-auto md:pt-2 md:pl-60 lg:pt-4   '>
-        <UserList/>
+            <PostReportList/>
         </div>
 
     </div>
   )
 }
 
-export default AdminHome
+export default PostReport

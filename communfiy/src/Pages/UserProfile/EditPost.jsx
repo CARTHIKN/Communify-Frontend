@@ -44,7 +44,6 @@ function EditPost() {
       const response = await axios.put(`http://127.0.0.1:8001/api/home/post/${post._id}/update/`, {
         caption: caption,
       });
-      console.log('Post updated successfully:', response.data);
       navigate(`/user/post/${post._id}`); // Redirect to the post view page after editing
     } catch (error) {
       console.error('Error updating post:', error);

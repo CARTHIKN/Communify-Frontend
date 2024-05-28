@@ -20,7 +20,6 @@ function SearchTab() {
     const [isLoading, setIsLoading] = useState(false);
     const baseUrl = "http://127.0.0.1:8000";
     const token = localStorage.getItem("access");
-    console.log(token);
 
     const handleSearch = async (query) => {
         try {

@@ -48,7 +48,6 @@ function ChangeProfile() {
     })
 
       .then(res =>{ if (res.data.secure_url) {
-        console.log('Secure URL available:', res.data.secure_url);
         setImageUrl(res.data.secure_url);
         setLoading(false);
       } else {
@@ -68,9 +67,7 @@ function ChangeProfile() {
           },
         });
         if (res.status === 200) {
-          console.log(res.data);
           setUserData(res.data)
-          console.log(userData);
           
         }
         return res;
@@ -84,14 +81,12 @@ function ChangeProfile() {
 
   useEffect(() => {
     if (imageUrl !== null) {
-      console.log('Updated imageUrl:', imageUrl);
       handleProfileUpdate(imageUrl);
     }
   }, [imageUrl]); 
 
   const handleProfileUpdate = async () => {
-    console.log("trying to submit")
-    console.log(username)
+
 
     const formData = {
         username:username,
@@ -105,7 +100,6 @@ function ChangeProfile() {
           
         });
 
-        console.log("200000")
         if (res.status === 200) {
 
           navigate("/user-profile", {

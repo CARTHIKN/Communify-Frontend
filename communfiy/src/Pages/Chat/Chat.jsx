@@ -13,6 +13,7 @@ function Chat() {
   const [selectedUsername, setSelectedUsername] = useState(null);
   const [socket,setSocket] = useState(null)
   const [trigger,setTrigger] = useState(true)
+  const [roomNamee,setRoomNamee] = useState(null)
 
   // Function to handle user click in ChatSideBar
   const handleUserClick = (username) => {
@@ -33,12 +34,13 @@ function Chat() {
           socket={socket}
           onUserClick={handleUserClick} // Pass the click handler to ChatSideBar
           trigger={trigger}
+          setRoomNamee={setRoomNamee}
         />
       </div>
       <div className='flex flex-col flex-1 pt-12'>
         <div className='flex-1'>
           {/* Pass selectedUsername to ChatArea */}
-          <ChatArea selectedUsername={selectedUsername} socket={socket} setTrigger={setTrigger} trigger = {trigger}/>
+          <ChatArea selectedUsername={selectedUsername} socket={socket} setTrigger={setTrigger} trigger = {trigger} roomNamee={roomNamee}/>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import axios from 'axios';
 function UserList() {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track current page
-    const pageSize = 5; // Number of users per page
+    const pageSize = 10; // Number of users per page
     const baseUrl = "http://127.0.0.1:8000";
 
     useEffect(() => {
@@ -23,10 +23,10 @@ function UserList() {
     const handleEdit = async (userId, isBlocked) => {
         try {
             const action = isBlocked ? 'unblock' : 'block';
-            await axios.patch(`${baseUrl}/api/admin/users/${userId}/`, { action });
+            await axios.patch(`${baseUrl}/api/accounts/admin/users/${userId}/`, { action });
 
             // Fetch updated user list after editing
-            const response = await axios.get(`${baseUrl}/api/admin/users/?page=${currentPage}&page_size=${pageSize}`);
+            const response = await axios.get(`${baseUrl}/api/accounts/admin/users/?page=${currentPage}&page_size=${pageSize}`);
             const updatedUsers = response.data.results;
 
             // Sort the updated users list based on ID to maintain order
@@ -52,7 +52,7 @@ function UserList() {
                 <div className="flex items-center justify-between pb-6">
                     <div>
                         <h2 className="font-semibold text-gray-700">Users Lists</h2>
-                        <span className="text-xs text-gray-500">View accounts of registered users</span>
+                        <span className="text-sm text-gray-500">View accounts of registered users</span>
                     </div>
                 </div>
                 <div className="overflow-y-hidden rounded-lg border">

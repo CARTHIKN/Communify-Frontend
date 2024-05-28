@@ -27,11 +27,9 @@ function ProfilePost() {
   useEffect(() => {
   
     const fetchSavedPosts = async () => {
-      console.log("saved");
       try {
         const response = await axios.post(baseUrl +'/api/home/user/fetch-saved-post/', { username:username });
         const { saved_posts } = response.data;
-        console.log(response.data,"----------====");
         setSavedPostIds(saved_posts);
       } catch (error) {
         console.error('Error fetching saved posts:', error);
@@ -53,7 +51,6 @@ function ProfilePost() {
             
           }
           setSavedPosts(fetchedPosts);
-          console.log(fetchedPosts);
         } catch (error) {
           console.error('Error fetching saved posts by ids:', error);
         }
@@ -62,7 +59,6 @@ function ProfilePost() {
       fetchSavedPostsByIds();
     }
   };
-  console.log(savedPosts);
 
   
 

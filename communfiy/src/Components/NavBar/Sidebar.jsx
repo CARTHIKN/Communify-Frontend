@@ -24,45 +24,7 @@ export default function SideBar(props) {
 
 
 
-  // useEffect(() => {
-  //   // Establish WebSocket connection
-  //   const wsUrl = `ws://127.0.0.1:8002/ws/notify/${username}/`;
-  //   const ws = new WebSocket(wsUrl);
   
-  //   // Set up event listeners
-  //   ws.onopen = () => {
-  //     console.log('WebSocket connection established.');
-  //   };
-  
-  //   ws.onmessage = (event) => {
-  //     console.log('Received message:', event.data);
-  //     const message = JSON.parse(event.data);
-  //     if (message.type === 'chat_notification') {
-  //       incrementChatNotificationCount();
-  //       console.log("helloooooooooooooo");
-  //       setNotificationCount((prevCount) => prevCount + 1);
-  //     }
-  //     // Handle incoming messages if needed
-  //   };
-  
-  //   ws.onerror = (error) => {
-  //     console.error('WebSocket error:', error);
-  //   };
-  
-  //   ws.onclose = () => {
-  //     console.log('WebSocket connection closed.');
-  //   };
-  
-  //   // Save the WebSocket connection to state
-  //   setSocket(ws);
-  
-  //   // Clean up on component unmount
-  //   return () => {
-  //     if (ws) {
-  //       ws.close();
-  //     }
-  //   };
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +36,6 @@ export default function SideBar(props) {
           }
         });
 
-        console.log(response.data);
         setNotificationCount(response.data.notification_count);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -90,7 +51,6 @@ export default function SideBar(props) {
         .then((res) => {
           if (res.status === 200) {
             setChatNotificationCounts(res.data);
-            console.log(res);
           }
         })
         .catch((error) => {
@@ -99,16 +59,13 @@ export default function SideBar(props) {
     } catch (error) {
       console.error(error);
     }
-    console.log("hlllo");
   }, [chatNotificationCount]);
   
   const markNotificationsAsSeen = async () => {
-    console.log("-----------------------------------------0");
     try {
         await axios.post('http://127.0.0.1:8001/api/home/user/mark-notification-as-seen/', {
             username: username 
         });
-        console.log("=================================================================");
         setNotificationCount(0); 
     } catch (error) {
         console.error('Error marking notifications as seen:', error);
